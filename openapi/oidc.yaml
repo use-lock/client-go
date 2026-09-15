@@ -1,0 +1,13 @@
+package: oidc
+output: oidc/client.gen.go
+generate:
+  models: true
+  client: true
+output-options:
+  exclude-tags:
+    - Admin API
+    - Management API
+  nullable-type: true
+  name-normalizer: ToCamelCaseWithInitialisms
+  user-templates:
+    client.tmpl: ./openapi/templates/client.tmpl
