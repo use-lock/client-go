@@ -1,0 +1,9 @@
+type APIError = lock.APIError
+type Response = lock.Response
+
+func WithToken(token string) ClientOption {
+    return WithRequestEditorFn(func(_ context.Context, req *http.Request) error {
+        req.Header.Set("Authorization", "Bearer " + token)
+        return nil
+    })
+}

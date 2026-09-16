@@ -29,729 +29,6 @@
         }
     ],
     "paths": {
-        "/v1/realms": {
-            "get": {
-                "operationId": "v1.realms.index",
-                "description": "Every realm this instance serves, the administration realm included.",
-                "summary": "List realms",
-                "tags": ["Admin API"],
-                "parameters": [
-                    {
-                        "name": "sort",
-                        "in": "query",
-                        "description": "Available sorts are `name`, `slug`, `created_at`. You can sort by multiple options by separating them with a comma. To sort in descending order, use `-` sign in front of the sort, for example: `-name`.",
-                        "style": "form",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "type": "string",
-                                "enum": [
-                                    "name",
-                                    "-name",
-                                    "slug",
-                                    "-slug",
-                                    "created_at",
-                                    "-created_at"
-                                ]
-                            }
-                        },
-                        "explode": false
-                    },
-                    {
-                        "name": "filter[name]",
-                        "in": "query",
-                        "description": "Filter by `name`. Matches values containing the given text, case-insensitively. Separate multiple values with a comma; records matching any value qualify.",
-                        "style": "form",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "type": "string"
-                            }
-                        },
-                        "explode": false
-                    },
-                    {
-                        "name": "filter[slug]",
-                        "in": "query",
-                        "description": "Filter by `slug`. Matches the exact value. Separate multiple values with a comma; records matching any value qualify.",
-                        "style": "form",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "type": "string"
-                            }
-                        },
-                        "explode": false
-                    },
-                    {
-                        "name": "filter[domain]",
-                        "in": "query",
-                        "description": "Filter by `domain`. Matches the exact value. Separate multiple values with a comma; records matching any value qualify.",
-                        "style": "form",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "type": "string"
-                            }
-                        },
-                        "explode": false
-                    },
-                    {
-                        "name": "filter[domain_status]",
-                        "in": "query",
-                        "description": "Filter by `domain_status`. Matches the exact value. Separate multiple values with a comma; records matching any value qualify.",
-                        "style": "form",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "type": "string",
-                                "enum": ["pending", "verified", "unreachable", "misrouted"]
-                            }
-                        },
-                        "explode": false
-                    },
-                    {
-                        "name": "page",
-                        "in": "query",
-                        "description": "The page number to retrieve.",
-                        "schema": {
-                            "type": "integer",
-                            "minimum": 1
-                        }
-                    },
-                    {
-                        "name": "per_page",
-                        "in": "query",
-                        "description": "The number of items to retrieve per page.",
-                        "schema": {
-                            "type": "integer",
-                            "minimum": 1,
-                            "maximum": 100
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Paginated set of `RealmData`",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "type": "array",
-                                            "items": {
-                                                "$ref": "#/components/schemas/RealmData"
-                                            }
-                                        },
-                                        "links": {
-                                            "type": "array",
-                                            "items": {
-                                                "type": "object",
-                                                "properties": {
-                                                    "url": {
-                                                        "type": ["string", "null"]
-                                                    },
-                                                    "label": {
-                                                        "type": "string"
-                                                    },
-                                                    "active": {
-                                                        "type": "boolean"
-                                                    }
-                                                },
-                                                "required": ["url", "label", "active"]
-                                            }
-                                        },
-                                        "meta": {
-                                            "type": "object",
-                                            "properties": {
-                                                "current_page": {
-                                                    "type": "integer",
-                                                    "minimum": 1
-                                                },
-                                                "first_page_url": {
-                                                    "type": ["string", "null"]
-                                                },
-                                                "from": {
-                                                    "type": ["integer", "null"],
-                                                    "minimum": 1
-                                                },
-                                                "last_page": {
-                                                    "type": "integer",
-                                                    "minimum": 1
-                                                },
-                                                "last_page_url": {
-                                                    "type": ["string", "null"]
-                                                },
-                                                "next_page_url": {
-                                                    "type": ["string", "null"]
-                                                },
-                                                "path": {
-                                                    "type": ["string", "null"]
-                                                },
-                                                "per_page": {
-                                                    "type": "integer",
-                                                    "minimum": 0
-                                                },
-                                                "prev_page_url": {
-                                                    "type": ["string", "null"]
-                                                },
-                                                "to": {
-                                                    "type": ["integer", "null"],
-                                                    "minimum": 1
-                                                },
-                                                "total": {
-                                                    "type": "integer",
-                                                    "minimum": 0
-                                                }
-                                            },
-                                            "required": [
-                                                "current_page",
-                                                "first_page_url",
-                                                "from",
-                                                "last_page",
-                                                "last_page_url",
-                                                "next_page_url",
-                                                "path",
-                                                "per_page",
-                                                "prev_page_url",
-                                                "to",
-                                                "total"
-                                            ]
-                                        }
-                                    },
-                                    "required": ["data", "links", "meta"]
-                                }
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "The access token is missing, expired, or not addressed to this API.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "error": {
-                                            "type": "string",
-                                            "description": "The RFC 6749 error code.",
-                                            "enum": ["invalid_token"]
-                                        },
-                                        "error_description": {
-                                            "type": "string",
-                                            "description": "A human readable explanation."
-                                        }
-                                    },
-                                    "required": ["error", "error_description"]
-                                }
-                            }
-                        }
-                    },
-                    "403": {
-                        "description": "The access token does not grant realms:read.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "error": {
-                                            "type": "string",
-                                            "description": "The RFC 6749 error code.",
-                                            "enum": ["insufficient_scope"]
-                                        },
-                                        "error_description": {
-                                            "type": "string",
-                                            "description": "A human readable explanation."
-                                        }
-                                    },
-                                    "required": ["error", "error_description"]
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "$ref": "#/components/responses/ValidationException"
-                    }
-                },
-                "security": [
-                    {
-                        "adminOAuth2": ["realms:read"]
-                    }
-                ],
-                "x-internal": true
-            },
-            "post": {
-                "operationId": "v1.realms.store",
-                "description": "The realm gets its own signing keypair, and its domain is checked right\naway. A domain that does not reach this instance yet is reported through\n`domain_status` rather than refused \u2014 DNS and the proxy usually follow.\nSettings left out of `settings` follow the instance defaults.",
-                "summary": "Create a realm",
-                "tags": ["Admin API"],
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/CreateRealmData"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "201": {
-                        "description": "",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/components/schemas/RealmData"
-                                        }
-                                    },
-                                    "required": ["data"]
-                                }
-                            }
-                        }
-                    },
-                    "422": {
-                        "$ref": "#/components/responses/ValidationException"
-                    },
-                    "401": {
-                        "description": "The access token is missing, expired, or not addressed to this API.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "error": {
-                                            "type": "string",
-                                            "description": "The RFC 6749 error code.",
-                                            "enum": ["invalid_token"]
-                                        },
-                                        "error_description": {
-                                            "type": "string",
-                                            "description": "A human readable explanation."
-                                        }
-                                    },
-                                    "required": ["error", "error_description"]
-                                }
-                            }
-                        }
-                    },
-                    "403": {
-                        "description": "The access token does not grant realms:write.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "error": {
-                                            "type": "string",
-                                            "description": "The RFC 6749 error code.",
-                                            "enum": ["insufficient_scope"]
-                                        },
-                                        "error_description": {
-                                            "type": "string",
-                                            "description": "A human readable explanation."
-                                        }
-                                    },
-                                    "required": ["error", "error_description"]
-                                }
-                            }
-                        }
-                    }
-                },
-                "security": [
-                    {
-                        "adminOAuth2": ["realms:write"]
-                    }
-                ],
-                "x-internal": true
-            }
-        },
-        "/v1/realms/{realm}": {
-            "get": {
-                "operationId": "v1.realms.show",
-                "summary": "Show a realm",
-                "tags": ["Admin API"],
-                "parameters": [
-                    {
-                        "name": "realm",
-                        "in": "path",
-                        "required": true,
-                        "description": "The realm slug",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/components/schemas/RealmData"
-                                        }
-                                    },
-                                    "required": ["data"]
-                                }
-                            }
-                        }
-                    },
-                    "404": {
-                        "$ref": "#/components/responses/ModelNotFoundException"
-                    },
-                    "401": {
-                        "description": "The access token is missing, expired, or not addressed to this API.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "error": {
-                                            "type": "string",
-                                            "description": "The RFC 6749 error code.",
-                                            "enum": ["invalid_token"]
-                                        },
-                                        "error_description": {
-                                            "type": "string",
-                                            "description": "A human readable explanation."
-                                        }
-                                    },
-                                    "required": ["error", "error_description"]
-                                }
-                            }
-                        }
-                    },
-                    "403": {
-                        "description": "The access token does not grant realms:read.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "error": {
-                                            "type": "string",
-                                            "description": "The RFC 6749 error code.",
-                                            "enum": ["insufficient_scope"]
-                                        },
-                                        "error_description": {
-                                            "type": "string",
-                                            "description": "A human readable explanation."
-                                        }
-                                    },
-                                    "required": ["error", "error_description"]
-                                }
-                            }
-                        }
-                    }
-                },
-                "security": [
-                    {
-                        "adminOAuth2": ["realms:read"]
-                    }
-                ],
-                "x-internal": true
-            },
-            "put": {
-                "operationId": "v1.realms.update",
-                "description": "A realm's slug is immutable. Settings left out of `settings` keep\ntheir current value. Re-pointing the domain changes the issuer of every\ntoken the realm mints and restarts the domain check.",
-                "summary": "Update a realm",
-                "tags": ["Admin API"],
-                "parameters": [
-                    {
-                        "name": "realm",
-                        "in": "path",
-                        "required": true,
-                        "description": "The realm slug",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
-                "requestBody": {
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/UpdateRealmData"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/components/schemas/RealmData"
-                                        }
-                                    },
-                                    "required": ["data"]
-                                }
-                            }
-                        }
-                    },
-                    "404": {
-                        "$ref": "#/components/responses/ModelNotFoundException"
-                    },
-                    "422": {
-                        "$ref": "#/components/responses/ValidationException"
-                    },
-                    "401": {
-                        "description": "The access token is missing, expired, or not addressed to this API.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "error": {
-                                            "type": "string",
-                                            "description": "The RFC 6749 error code.",
-                                            "enum": ["invalid_token"]
-                                        },
-                                        "error_description": {
-                                            "type": "string",
-                                            "description": "A human readable explanation."
-                                        }
-                                    },
-                                    "required": ["error", "error_description"]
-                                }
-                            }
-                        }
-                    },
-                    "403": {
-                        "description": "The access token does not grant realms:write.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "error": {
-                                            "type": "string",
-                                            "description": "The RFC 6749 error code.",
-                                            "enum": ["insufficient_scope"]
-                                        },
-                                        "error_description": {
-                                            "type": "string",
-                                            "description": "A human readable explanation."
-                                        }
-                                    },
-                                    "required": ["error", "error_description"]
-                                }
-                            }
-                        }
-                    }
-                },
-                "security": [
-                    {
-                        "adminOAuth2": ["realms:write"]
-                    }
-                ],
-                "x-internal": true
-            },
-            "patch": {
-                "operationId": "api.v1.realms.update.patch",
-                "description": "A realm's slug is immutable. Settings left out of `settings` keep\ntheir current value. Re-pointing the domain changes the issuer of every\ntoken the realm mints and restarts the domain check.",
-                "summary": "Update a realm",
-                "tags": ["Admin API"],
-                "parameters": [
-                    {
-                        "name": "realm",
-                        "in": "path",
-                        "required": true,
-                        "description": "The realm slug",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
-                "requestBody": {
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/UpdateRealmData"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "data": {
-                                            "$ref": "#/components/schemas/RealmData"
-                                        }
-                                    },
-                                    "required": ["data"]
-                                }
-                            }
-                        }
-                    },
-                    "404": {
-                        "$ref": "#/components/responses/ModelNotFoundException"
-                    },
-                    "422": {
-                        "$ref": "#/components/responses/ValidationException"
-                    },
-                    "401": {
-                        "description": "The access token is missing, expired, or not addressed to this API.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "error": {
-                                            "type": "string",
-                                            "description": "The RFC 6749 error code.",
-                                            "enum": ["invalid_token"]
-                                        },
-                                        "error_description": {
-                                            "type": "string",
-                                            "description": "A human readable explanation."
-                                        }
-                                    },
-                                    "required": ["error", "error_description"]
-                                }
-                            }
-                        }
-                    },
-                    "403": {
-                        "description": "The access token does not grant realms:write.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "error": {
-                                            "type": "string",
-                                            "description": "The RFC 6749 error code.",
-                                            "enum": ["insufficient_scope"]
-                                        },
-                                        "error_description": {
-                                            "type": "string",
-                                            "description": "A human readable explanation."
-                                        }
-                                    },
-                                    "required": ["error", "error_description"]
-                                }
-                            }
-                        }
-                    }
-                },
-                "security": [
-                    {
-                        "adminOAuth2": ["realms:write"]
-                    }
-                ],
-                "x-internal": true
-            },
-            "delete": {
-                "operationId": "v1.realms.destroy",
-                "description": "Purges the realm's users, roles, clients, tokens and keys, and frees its\nslug. The administration realm cannot be deleted.",
-                "summary": "Delete a realm",
-                "tags": ["Admin API"],
-                "parameters": [
-                    {
-                        "name": "realm",
-                        "in": "path",
-                        "required": true,
-                        "description": "The realm slug",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
-                "responses": {
-                    "204": {
-                        "description": "No content"
-                    },
-                    "409": {
-                        "description": "An error",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "message": {
-                                            "type": "string",
-                                            "description": "Error overview.",
-                                            "examples": [
-                                                "The administration realm cannot be deleted."
-                                            ]
-                                        }
-                                    },
-                                    "required": ["message"]
-                                }
-                            }
-                        }
-                    },
-                    "404": {
-                        "$ref": "#/components/responses/ModelNotFoundException"
-                    },
-                    "401": {
-                        "description": "The access token is missing, expired, or not addressed to this API.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "error": {
-                                            "type": "string",
-                                            "description": "The RFC 6749 error code.",
-                                            "enum": ["invalid_token"]
-                                        },
-                                        "error_description": {
-                                            "type": "string",
-                                            "description": "A human readable explanation."
-                                        }
-                                    },
-                                    "required": ["error", "error_description"]
-                                }
-                            }
-                        }
-                    },
-                    "403": {
-                        "description": "The access token does not grant realms:write.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "error": {
-                                            "type": "string",
-                                            "description": "The RFC 6749 error code.",
-                                            "enum": ["insufficient_scope"]
-                                        },
-                                        "error_description": {
-                                            "type": "string",
-                                            "description": "A human readable explanation."
-                                        }
-                                    },
-                                    "required": ["error", "error_description"]
-                                }
-                            }
-                        }
-                    }
-                },
-                "security": [
-                    {
-                        "adminOAuth2": ["realms:write"]
-                    }
-                ],
-                "x-internal": true
-            }
-        },
         "/v1/realms/{realm}/social-providers": {
             "get": {
                 "operationId": "v1.realms.social-providers.index",
@@ -997,7 +274,7 @@
                         "oauth2": ["social-providers:read"]
                     }
                 ],
-                "x-internal": false
+                "x-group": "management"
             },
             "post": {
                 "operationId": "v1.realms.social-providers.store",
@@ -1096,7 +373,7 @@
                         "oauth2": ["social-providers:write"]
                     }
                 ],
-                "x-internal": false
+                "x-group": "management"
             }
         },
         "/v1/realms/{realm}/social-providers/{social_provider}": {
@@ -1192,7 +469,7 @@
                         "oauth2": ["social-providers:read"]
                     }
                 ],
-                "x-internal": false
+                "x-group": "management"
             },
             "put": {
                 "operationId": "v1.realms.social-providers.update",
@@ -1298,7 +575,88 @@
                         "oauth2": ["social-providers:write"]
                     }
                 ],
-                "x-internal": false
+                "x-group": "management"
+            },
+            "delete": {
+                "operationId": "v1.realms.social-providers.destroy",
+                "tags": ["Management API"],
+                "parameters": [
+                    {
+                        "name": "realm",
+                        "in": "path",
+                        "required": true,
+                        "description": "The realm slug",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "social_provider",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No content"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/ModelNotFoundException"
+                    },
+                    "401": {
+                        "description": "The access token is missing, expired, or not addressed to this API.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "description": "The RFC 6749 error code.",
+                                            "enum": ["invalid_token"]
+                                        },
+                                        "error_description": {
+                                            "type": "string",
+                                            "description": "A human readable explanation."
+                                        }
+                                    },
+                                    "required": ["error", "error_description"]
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "The access token does not grant social-providers:write.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "description": "The RFC 6749 error code.",
+                                            "enum": ["insufficient_scope"]
+                                        },
+                                        "error_description": {
+                                            "type": "string",
+                                            "description": "A human readable explanation."
+                                        }
+                                    },
+                                    "required": ["error", "error_description"]
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "oauth2": ["social-providers:write"]
+                    }
+                ],
+                "x-group": "management"
             },
             "patch": {
                 "operationId": "api.v1.realms.social-providers.update.patch",
@@ -1404,88 +762,7 @@
                         "oauth2": ["social-providers:write"]
                     }
                 ],
-                "x-internal": false
-            },
-            "delete": {
-                "operationId": "v1.realms.social-providers.destroy",
-                "tags": ["Management API"],
-                "parameters": [
-                    {
-                        "name": "realm",
-                        "in": "path",
-                        "required": true,
-                        "description": "The realm slug",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "social_provider",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
-                "responses": {
-                    "204": {
-                        "description": "No content"
-                    },
-                    "404": {
-                        "$ref": "#/components/responses/ModelNotFoundException"
-                    },
-                    "401": {
-                        "description": "The access token is missing, expired, or not addressed to this API.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "error": {
-                                            "type": "string",
-                                            "description": "The RFC 6749 error code.",
-                                            "enum": ["invalid_token"]
-                                        },
-                                        "error_description": {
-                                            "type": "string",
-                                            "description": "A human readable explanation."
-                                        }
-                                    },
-                                    "required": ["error", "error_description"]
-                                }
-                            }
-                        }
-                    },
-                    "403": {
-                        "description": "The access token does not grant social-providers:write.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "error": {
-                                            "type": "string",
-                                            "description": "The RFC 6749 error code.",
-                                            "enum": ["insufficient_scope"]
-                                        },
-                                        "error_description": {
-                                            "type": "string",
-                                            "description": "A human readable explanation."
-                                        }
-                                    },
-                                    "required": ["error", "error_description"]
-                                }
-                            }
-                        }
-                    }
-                },
-                "security": [
-                    {
-                        "oauth2": ["social-providers:write"]
-                    }
-                ],
-                "x-internal": false
+                "x-group": "management"
             }
         },
         "/v1/realms/{realm}/clients": {
@@ -1742,7 +1019,7 @@
                         "oauth2": ["clients:read"]
                     }
                 ],
-                "x-internal": false
+                "x-group": "management"
             },
             "post": {
                 "operationId": "v1.realms.clients.store",
@@ -1843,7 +1120,7 @@
                         "oauth2": ["clients:write"]
                     }
                 ],
-                "x-internal": false
+                "x-group": "management"
             }
         },
         "/v1/realms/{realm}/clients/{client}": {
@@ -1940,7 +1217,7 @@
                         "oauth2": ["clients:read"]
                     }
                 ],
-                "x-internal": false
+                "x-group": "management"
             },
             "put": {
                 "operationId": "v1.realms.clients.update",
@@ -2048,7 +1325,90 @@
                         "oauth2": ["clients:write"]
                     }
                 ],
-                "x-internal": false
+                "x-group": "management"
+            },
+            "delete": {
+                "operationId": "v1.realms.clients.destroy",
+                "description": "Purges the client together with the tokens, grants and consents issued\nfor it. Blocking it instead keeps the trail.",
+                "summary": "Delete a client",
+                "tags": ["Management API"],
+                "parameters": [
+                    {
+                        "name": "realm",
+                        "in": "path",
+                        "required": true,
+                        "description": "The realm slug",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "client",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No content"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/ModelNotFoundException"
+                    },
+                    "401": {
+                        "description": "The access token is missing, expired, or not addressed to this API.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "description": "The RFC 6749 error code.",
+                                            "enum": ["invalid_token"]
+                                        },
+                                        "error_description": {
+                                            "type": "string",
+                                            "description": "A human readable explanation."
+                                        }
+                                    },
+                                    "required": ["error", "error_description"]
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "The access token does not grant clients:write.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "description": "The RFC 6749 error code.",
+                                            "enum": ["insufficient_scope"]
+                                        },
+                                        "error_description": {
+                                            "type": "string",
+                                            "description": "A human readable explanation."
+                                        }
+                                    },
+                                    "required": ["error", "error_description"]
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "oauth2": ["clients:write"]
+                    }
+                ],
+                "x-group": "management"
             },
             "patch": {
                 "operationId": "api.v1.realms.clients.update.patch",
@@ -2156,90 +1516,7 @@
                         "oauth2": ["clients:write"]
                     }
                 ],
-                "x-internal": false
-            },
-            "delete": {
-                "operationId": "v1.realms.clients.destroy",
-                "description": "Purges the client together with the tokens, grants and consents issued\nfor it. Blocking it instead keeps the trail.",
-                "summary": "Delete a client",
-                "tags": ["Management API"],
-                "parameters": [
-                    {
-                        "name": "realm",
-                        "in": "path",
-                        "required": true,
-                        "description": "The realm slug",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "client",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
-                "responses": {
-                    "204": {
-                        "description": "No content"
-                    },
-                    "404": {
-                        "$ref": "#/components/responses/ModelNotFoundException"
-                    },
-                    "401": {
-                        "description": "The access token is missing, expired, or not addressed to this API.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "error": {
-                                            "type": "string",
-                                            "description": "The RFC 6749 error code.",
-                                            "enum": ["invalid_token"]
-                                        },
-                                        "error_description": {
-                                            "type": "string",
-                                            "description": "A human readable explanation."
-                                        }
-                                    },
-                                    "required": ["error", "error_description"]
-                                }
-                            }
-                        }
-                    },
-                    "403": {
-                        "description": "The access token does not grant clients:write.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "error": {
-                                            "type": "string",
-                                            "description": "The RFC 6749 error code.",
-                                            "enum": ["insufficient_scope"]
-                                        },
-                                        "error_description": {
-                                            "type": "string",
-                                            "description": "A human readable explanation."
-                                        }
-                                    },
-                                    "required": ["error", "error_description"]
-                                }
-                            }
-                        }
-                    }
-                },
-                "security": [
-                    {
-                        "oauth2": ["clients:write"]
-                    }
-                ],
-                "x-internal": false
+                "x-group": "management"
             }
         },
         "/v1/realms/{realm}/clients/{client}/secret": {
@@ -2338,7 +1615,7 @@
                         "oauth2": ["clients:write"]
                     }
                 ],
-                "x-internal": false
+                "x-group": "management"
             }
         },
         "/v1/realms/{realm}/clients/{client}/rotate-secret": {
@@ -2437,7 +1714,7 @@
                         "oauth2": ["clients:write"]
                     }
                 ],
-                "x-internal": false
+                "x-group": "management"
             }
         },
         "/v1/realms/{realm}/resources": {
@@ -2673,7 +1950,7 @@
                         "oauth2": ["resources:read"]
                     }
                 ],
-                "x-internal": false
+                "x-group": "management"
             },
             "post": {
                 "operationId": "v1.realms.resources.store",
@@ -2773,7 +2050,7 @@
                         "oauth2": ["resources:write"]
                     }
                 ],
-                "x-internal": false
+                "x-group": "management"
             }
         },
         "/v1/realms/{realm}/resources/{resource}": {
@@ -2870,7 +2147,7 @@
                         "oauth2": ["resources:read"]
                     }
                 ],
-                "x-internal": false
+                "x-group": "management"
             },
             "put": {
                 "operationId": "v1.realms.resources.update",
@@ -2978,7 +2255,90 @@
                         "oauth2": ["resources:write"]
                     }
                 ],
-                "x-internal": false
+                "x-group": "management"
+            },
+            "delete": {
+                "operationId": "v1.realms.resources.destroy",
+                "description": "The built-in API resources cannot be deleted.",
+                "summary": "Delete a resource and its scopes",
+                "tags": ["Management API"],
+                "parameters": [
+                    {
+                        "name": "realm",
+                        "in": "path",
+                        "required": true,
+                        "description": "The realm slug",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "resource",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No content"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/ModelNotFoundException"
+                    },
+                    "401": {
+                        "description": "The access token is missing, expired, or not addressed to this API.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "description": "The RFC 6749 error code.",
+                                            "enum": ["invalid_token"]
+                                        },
+                                        "error_description": {
+                                            "type": "string",
+                                            "description": "A human readable explanation."
+                                        }
+                                    },
+                                    "required": ["error", "error_description"]
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "The access token does not grant resources:write.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "description": "The RFC 6749 error code.",
+                                            "enum": ["insufficient_scope"]
+                                        },
+                                        "error_description": {
+                                            "type": "string",
+                                            "description": "A human readable explanation."
+                                        }
+                                    },
+                                    "required": ["error", "error_description"]
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "oauth2": ["resources:write"]
+                    }
+                ],
+                "x-group": "management"
             },
             "patch": {
                 "operationId": "api.v1.realms.resources.update.patch",
@@ -3086,1359 +2446,7 @@
                         "oauth2": ["resources:write"]
                     }
                 ],
-                "x-internal": false
-            },
-            "delete": {
-                "operationId": "v1.realms.resources.destroy",
-                "description": "The built-in API resources cannot be deleted.",
-                "summary": "Delete a resource and its scopes",
-                "tags": ["Management API"],
-                "parameters": [
-                    {
-                        "name": "realm",
-                        "in": "path",
-                        "required": true,
-                        "description": "The realm slug",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "resource",
-                        "in": "path",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
-                "responses": {
-                    "204": {
-                        "description": "No content"
-                    },
-                    "404": {
-                        "$ref": "#/components/responses/ModelNotFoundException"
-                    },
-                    "401": {
-                        "description": "The access token is missing, expired, or not addressed to this API.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "error": {
-                                            "type": "string",
-                                            "description": "The RFC 6749 error code.",
-                                            "enum": ["invalid_token"]
-                                        },
-                                        "error_description": {
-                                            "type": "string",
-                                            "description": "A human readable explanation."
-                                        }
-                                    },
-                                    "required": ["error", "error_description"]
-                                }
-                            }
-                        }
-                    },
-                    "403": {
-                        "description": "The access token does not grant resources:write.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "error": {
-                                            "type": "string",
-                                            "description": "The RFC 6749 error code.",
-                                            "enum": ["insufficient_scope"]
-                                        },
-                                        "error_description": {
-                                            "type": "string",
-                                            "description": "A human readable explanation."
-                                        }
-                                    },
-                                    "required": ["error", "error_description"]
-                                }
-                            }
-                        }
-                    }
-                },
-                "security": [
-                    {
-                        "oauth2": ["resources:write"]
-                    }
-                ],
-                "x-internal": false
-            }
-        },
-        "/oauth/token": {
-            "post": {
-                "operationId": "oidc.token.post",
-                "tags": ["Auth"],
-                "responses": {
-                    "200": {
-                        "description": "Issued tokens. Refresh tokens and ID tokens depend on the grant and granted scopes.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/OAuthTokenResponse"
-                                }
-                            }
-                        },
-                        "headers": {
-                            "Cache-Control": {
-                                "schema": {
-                                    "type": "string",
-                                    "enum": ["no-store"]
-                                }
-                            },
-                            "Pragma": {
-                                "schema": {
-                                    "type": "string",
-                                    "enum": ["no-cache"]
-                                }
-                            }
-                        }
-                    },
-                    "500": {
-                        "description": "Token issuance failed (server_error).",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/OAuthError"
-                                }
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "OAuth error: invalid_request, invalid_grant, invalid_scope, invalid_target, unauthorized_client or unsupported_grant_type.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/OAuthError"
-                                }
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Client authentication failed (invalid_client).",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/OAuthError"
-                                }
-                            }
-                        },
-                        "headers": {
-                            "WWW-Authenticate": {
-                                "schema": {
-                                    "type": "string"
-                                },
-                                "description": "Basic challenge for the current realm."
-                            }
-                        }
-                    },
-                    "429": {
-                        "description": "Rate limit exceeded.",
-                        "headers": {
-                            "Retry-After": {
-                                "schema": {
-                                    "type": "integer"
-                                }
-                            }
-                        }
-                    }
-                },
-                "security": [
-                    {
-                        "clientSecretBasic": []
-                    },
-                    {}
-                ],
-                "servers": [
-                    {
-                        "url": "https://lock.example"
-                    }
-                ],
-                "summary": "Issue or exchange tokens",
-                "description": "Use the realm host as the issuer. Authenticate with the client\u2019s registered method: HTTP Basic (URL-encode the identifier and secret before Base64 encoding), client_id/client_secret in the form, or client_id alone for public clients. Do not combine Basic and a form secret. Token exchange requires realm support and an eligible confidential or trusted first-party client.",
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/x-www-form-urlencoded": {
-                            "schema": {
-                                "$ref": "#/components/schemas/OAuthTokenRequest"
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/oauth/introspect": {
-            "post": {
-                "operationId": "oidc.introspect.post",
-                "tags": ["Auth"],
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/x-www-form-urlencoded": {
-                            "schema": {
-                                "$ref": "#/components/schemas/OAuthPresentedToken"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Token activity and visible metadata.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/OAuthIntrospection"
-                                }
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "OAuth error: invalid_request, invalid_grant, invalid_scope, invalid_target, unauthorized_client or unsupported_grant_type.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/OAuthError"
-                                }
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Client authentication failed (invalid_client).",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/OAuthError"
-                                }
-                            }
-                        },
-                        "headers": {
-                            "WWW-Authenticate": {
-                                "schema": {
-                                    "type": "string"
-                                },
-                                "description": "Basic challenge for the current realm."
-                            }
-                        }
-                    },
-                    "429": {
-                        "description": "Rate limit exceeded.",
-                        "headers": {
-                            "Retry-After": {
-                                "schema": {
-                                    "type": "integer"
-                                }
-                            }
-                        }
-                    }
-                },
-                "security": [
-                    {
-                        "clientSecretBasic": []
-                    },
-                    {}
-                ],
-                "servers": [
-                    {
-                        "url": "https://lock.example"
-                    }
-                ],
-                "summary": "Inspect a token",
-                "description": "Requires a confidential client using its registered client_secret_basic or client_secret_post method. Unknown, expired, revoked and inaccessible tokens return active: false."
-            }
-        },
-        "/oauth/revoke": {
-            "post": {
-                "operationId": "oidc.revoke.post",
-                "tags": ["Auth"],
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/x-www-form-urlencoded": {
-                            "schema": {
-                                "$ref": "#/components/schemas/OAuthPresentedToken"
-                            }
-                        }
-                    }
-                },
-                "responses": {
-                    "200": {
-                        "description": "Revocation processed; the response body is empty."
-                    },
-                    "400": {
-                        "description": "OAuth error: invalid_request, invalid_grant, invalid_scope, invalid_target, unauthorized_client or unsupported_grant_type.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/OAuthError"
-                                }
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Client authentication failed (invalid_client).",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/OAuthError"
-                                }
-                            }
-                        },
-                        "headers": {
-                            "WWW-Authenticate": {
-                                "schema": {
-                                    "type": "string"
-                                },
-                                "description": "Basic challenge for the current realm."
-                            }
-                        }
-                    },
-                    "429": {
-                        "description": "Rate limit exceeded.",
-                        "headers": {
-                            "Retry-After": {
-                                "schema": {
-                                    "type": "integer"
-                                }
-                            }
-                        }
-                    }
-                },
-                "security": [
-                    {
-                        "clientSecretBasic": []
-                    },
-                    {}
-                ],
-                "servers": [
-                    {
-                        "url": "https://lock.example"
-                    }
-                ],
-                "summary": "Revoke a token",
-                "description": "Authenticate with the registered Basic, form-secret or public-client method. Unknown tokens and tokens owned by another client also return an empty success response."
-            }
-        },
-        "/oauth/register": {
-            "post": {
-                "operationId": "oidc.register.post",
-                "tags": ["Auth"],
-                "responses": {
-                    "201": {
-                        "description": "Registered metadata; a confidential client also receives its secret.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/OAuthRegisteredClient"
-                                }
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "invalid_redirect_uri or invalid_client_metadata.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/OAuthError"
-                                }
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "Dynamic registration is disabled for this realm."
-                    },
-                    "429": {
-                        "description": "Rate limit exceeded."
-                    }
-                },
-                "security": [],
-                "servers": [
-                    {
-                        "url": "https://lock.example"
-                    }
-                ],
-                "summary": "Register an OAuth client",
-                "description": "Dynamic client registration must be enabled for the realm. Registers authorization-code clients, optionally with refresh tokens. Unknown metadata is ignored.",
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/json": {
-                            "schema": {
-                                "$ref": "#/components/schemas/OAuthClientRegistration"
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/oauth/authorize": {
-            "get": {
-                "operationId": "oidc.authorize.get",
-                "tags": ["Auth"],
-                "responses": {
-                    "200": {
-                        "description": "Browser interaction page (HTML, or an Inertia page when requested).",
-                        "content": {
-                            "text/html": {
-                                "schema": {
-                                    "type": "string"
-                                }
-                            },
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "additionalProperties": true
-                                }
-                            }
-                        }
-                    },
-                    "302": {
-                        "description": "Redirect to sign-in, a required action, the client callback or the post-logout destination.",
-                        "headers": {
-                            "Location": {
-                                "schema": {
-                                    "type": "string",
-                                    "format": "uri-reference"
-                                }
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Invalid request before a trusted client redirect can be selected.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/OAuthError"
-                                }
-                            }
-                        }
-                    },
-                    "409": {
-                        "description": "External redirect for an Inertia request.",
-                        "headers": {
-                            "X-Inertia-Location": {
-                                "schema": {
-                                    "type": "string",
-                                    "format": "uri-reference"
-                                }
-                            }
-                        }
-                    }
-                },
-                "security": [],
-                "servers": [
-                    {
-                        "url": "https://lock.example"
-                    }
-                ],
-                "summary": "Authorize a client",
-                "description": "Browser authorization-code flow with S256 PKCE. Uses the identity session and may redirect to sign-in, required actions or consent. Success redirects to the registered callback with code, iss and the original state. After validating the client and callback, protocol errors also redirect there with error, error_description, iss and state. request and request_uri are unsupported; only response_mode=query is supported. POST requires the browser\u2019s CSRF token.",
-                "parameters": [
-                    {
-                        "name": "client_id",
-                        "in": "query",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "response_type",
-                        "in": "query",
-                        "required": true,
-                        "schema": {
-                            "type": "string",
-                            "enum": ["code"]
-                        }
-                    },
-                    {
-                        "name": "redirect_uri",
-                        "in": "query",
-                        "required": false,
-                        "schema": {
-                            "type": "string",
-                            "format": "uri",
-                            "description": "Registered callback. May be omitted only when the client has exactly one registered redirect URI."
-                        }
-                    },
-                    {
-                        "name": "scope",
-                        "in": "query",
-                        "required": false,
-                        "schema": {
-                            "type": "string",
-                            "description": "Space-delimited scopes; include openid for OpenID Connect."
-                        }
-                    },
-                    {
-                        "name": "state",
-                        "in": "query",
-                        "required": false,
-                        "schema": {
-                            "type": "string",
-                            "description": "Opaque client state echoed on the callback."
-                        }
-                    },
-                    {
-                        "name": "resource",
-                        "in": "query",
-                        "required": false,
-                        "schema": {
-                            "oneOf": [
-                                {
-                                    "type": "string",
-                                    "format": "uri"
-                                },
-                                {
-                                    "type": "array",
-                                    "items": {
-                                        "type": "string",
-                                        "format": "uri"
-                                    }
-                                }
-                            ],
-                            "description": "Absolute protected-resource URI without a fragment, or an array of such URIs using resource[] fields. Authorization and client-credentials requests default to the realm audience. Code and refresh grants preserve the original audiences when omitted, or narrow them when supplied."
-                        }
-                    },
-                    {
-                        "name": "code_challenge",
-                        "in": "query",
-                        "required": true,
-                        "schema": {
-                            "type": "string",
-                            "description": "Base64url-encoded SHA-256 digest of the PKCE verifier."
-                        }
-                    },
-                    {
-                        "name": "code_challenge_method",
-                        "in": "query",
-                        "required": true,
-                        "schema": {
-                            "type": "string",
-                            "enum": ["S256"]
-                        }
-                    },
-                    {
-                        "name": "nonce",
-                        "in": "query",
-                        "required": false,
-                        "schema": {
-                            "type": "string",
-                            "description": "Nonce bound to the issued ID token."
-                        }
-                    },
-                    {
-                        "name": "prompt",
-                        "in": "query",
-                        "required": false,
-                        "schema": {
-                            "type": "string",
-                            "description": "Space-delimited none, login, consent or select_account. none must be used alone."
-                        }
-                    },
-                    {
-                        "name": "max_age",
-                        "in": "query",
-                        "required": false,
-                        "schema": {
-                            "type": "integer",
-                            "minimum": 0,
-                            "description": "Maximum acceptable age of authentication in seconds."
-                        }
-                    },
-                    {
-                        "name": "acr_values",
-                        "in": "query",
-                        "required": false,
-                        "schema": {
-                            "type": "string",
-                            "description": "Space-delimited requested authentication context values."
-                        }
-                    },
-                    {
-                        "name": "id_token_hint",
-                        "in": "query",
-                        "required": false,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "name": "response_mode",
-                        "in": "query",
-                        "required": false,
-                        "schema": {
-                            "type": "string",
-                            "enum": ["query"]
-                        }
-                    }
-                ]
-            },
-            "post": {
-                "operationId": "oidc.authorize.post",
-                "tags": ["Auth"],
-                "responses": {
-                    "200": {
-                        "description": "Browser interaction page (HTML, or an Inertia page when requested).",
-                        "content": {
-                            "text/html": {
-                                "schema": {
-                                    "type": "string"
-                                }
-                            },
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "additionalProperties": true
-                                }
-                            }
-                        }
-                    },
-                    "302": {
-                        "description": "Redirect to sign-in, a required action, the client callback or the post-logout destination.",
-                        "headers": {
-                            "Location": {
-                                "schema": {
-                                    "type": "string",
-                                    "format": "uri-reference"
-                                }
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Invalid request before a trusted client redirect can be selected.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/OAuthError"
-                                }
-                            }
-                        }
-                    },
-                    "409": {
-                        "description": "External redirect for an Inertia request.",
-                        "headers": {
-                            "X-Inertia-Location": {
-                                "schema": {
-                                    "type": "string",
-                                    "format": "uri-reference"
-                                }
-                            }
-                        }
-                    },
-                    "419": {
-                        "description": "The browser CSRF token is missing or expired."
-                    }
-                },
-                "security": [],
-                "servers": [
-                    {
-                        "url": "https://lock.example"
-                    }
-                ],
-                "summary": "Authorize a client",
-                "description": "Browser authorization-code flow with S256 PKCE. Uses the identity session and may redirect to sign-in, required actions or consent. Success redirects to the registered callback with code, iss and the original state. After validating the client and callback, protocol errors also redirect there with error, error_description, iss and state. request and request_uri are unsupported; only response_mode=query is supported. POST requires the browser\u2019s CSRF token.",
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/x-www-form-urlencoded": {
-                            "schema": {
-                                "$ref": "#/components/schemas/OAuthAuthorizationRequest"
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/oauth/logout": {
-            "get": {
-                "operationId": "oidc.logout.get",
-                "tags": ["Auth"],
-                "responses": {
-                    "200": {
-                        "description": "Browser interaction page (HTML, or an Inertia page when requested).",
-                        "content": {
-                            "text/html": {
-                                "schema": {
-                                    "type": "string"
-                                }
-                            },
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "additionalProperties": true
-                                }
-                            }
-                        }
-                    },
-                    "302": {
-                        "description": "Redirect to sign-in, a required action, the client callback or the post-logout destination.",
-                        "headers": {
-                            "Location": {
-                                "schema": {
-                                    "type": "string",
-                                    "format": "uri-reference"
-                                }
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Invalid request before a trusted client redirect can be selected.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/OAuthError"
-                                }
-                            }
-                        }
-                    },
-                    "409": {
-                        "description": "External redirect for an Inertia request.",
-                        "headers": {
-                            "X-Inertia-Location": {
-                                "schema": {
-                                    "type": "string",
-                                    "format": "uri-reference"
-                                }
-                            }
-                        }
-                    }
-                },
-                "security": [],
-                "servers": [
-                    {
-                        "url": "https://lock.example"
-                    }
-                ],
-                "summary": "End the identity session",
-                "description": "Browser logout, optionally with a confirmation page. A post-logout redirect is used only when registered to the identified client; state is echoed on that redirect. Invalid ID token hints are ignored. POST requires the browser\u2019s CSRF token.",
-                "parameters": [
-                    {
-                        "name": "id_token_hint",
-                        "in": "query",
-                        "required": false,
-                        "schema": {
-                            "type": "string",
-                            "description": "Previously issued ID token identifying the client and session."
-                        }
-                    },
-                    {
-                        "name": "client_id",
-                        "in": "query",
-                        "required": false,
-                        "schema": {
-                            "type": "string",
-                            "description": "Client identifier; must agree with a valid ID token hint."
-                        }
-                    },
-                    {
-                        "name": "post_logout_redirect_uri",
-                        "in": "query",
-                        "required": false,
-                        "schema": {
-                            "type": "string",
-                            "format": "uri",
-                            "description": "Must be registered for the identified client."
-                        }
-                    },
-                    {
-                        "name": "state",
-                        "in": "query",
-                        "required": false,
-                        "schema": {
-                            "type": "string",
-                            "description": "Echoed on an accepted post-logout redirect."
-                        }
-                    },
-                    {
-                        "name": "logout_hint",
-                        "in": "query",
-                        "required": false,
-                        "schema": {
-                            "type": "string",
-                            "description": "Accepted but currently ignored."
-                        }
-                    },
-                    {
-                        "name": "ui_locales",
-                        "in": "query",
-                        "required": false,
-                        "schema": {
-                            "type": "string",
-                            "description": "Accepted but currently ignored."
-                        }
-                    }
-                ]
-            },
-            "post": {
-                "operationId": "oidc.logout.post",
-                "tags": ["Auth"],
-                "responses": {
-                    "200": {
-                        "description": "Browser interaction page (HTML, or an Inertia page when requested).",
-                        "content": {
-                            "text/html": {
-                                "schema": {
-                                    "type": "string"
-                                }
-                            },
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "additionalProperties": true
-                                }
-                            }
-                        }
-                    },
-                    "302": {
-                        "description": "Redirect to sign-in, a required action, the client callback or the post-logout destination.",
-                        "headers": {
-                            "Location": {
-                                "schema": {
-                                    "type": "string",
-                                    "format": "uri-reference"
-                                }
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Invalid request before a trusted client redirect can be selected.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/OAuthError"
-                                }
-                            }
-                        }
-                    },
-                    "409": {
-                        "description": "External redirect for an Inertia request.",
-                        "headers": {
-                            "X-Inertia-Location": {
-                                "schema": {
-                                    "type": "string",
-                                    "format": "uri-reference"
-                                }
-                            }
-                        }
-                    },
-                    "419": {
-                        "description": "The browser CSRF token is missing or expired."
-                    }
-                },
-                "security": [],
-                "servers": [
-                    {
-                        "url": "https://lock.example"
-                    }
-                ],
-                "summary": "End the identity session",
-                "description": "Browser logout, optionally with a confirmation page. A post-logout redirect is used only when registered to the identified client; state is echoed on that redirect. Invalid ID token hints are ignored. POST requires the browser\u2019s CSRF token.",
-                "requestBody": {
-                    "required": false,
-                    "content": {
-                        "application/x-www-form-urlencoded": {
-                            "schema": {
-                                "$ref": "#/components/schemas/OAuthLogoutRequest"
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/oauth/authorize/consent": {
-            "post": {
-                "operationId": "oidc.approve.post",
-                "tags": ["Auth"],
-                "responses": {
-                    "403": {
-                        "description": "The consent auth_token is invalid or has already been used."
-                    },
-                    "419": {
-                        "description": "The browser CSRF token is missing or expired."
-                    },
-                    "302": {
-                        "description": "Redirect to sign-in, a required action, the client callback or the post-logout destination.",
-                        "headers": {
-                            "Location": {
-                                "schema": {
-                                    "type": "string",
-                                    "format": "uri-reference"
-                                }
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Invalid request before a trusted client redirect can be selected.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/OAuthError"
-                                }
-                            }
-                        }
-                    },
-                    "409": {
-                        "description": "External redirect for an Inertia request.",
-                        "headers": {
-                            "X-Inertia-Location": {
-                                "schema": {
-                                    "type": "string",
-                                    "format": "uri-reference"
-                                }
-                            }
-                        }
-                    }
-                },
-                "security": [],
-                "servers": [
-                    {
-                        "url": "https://lock.example"
-                    }
-                ],
-                "summary": "Approve authorization consent",
-                "description": "Browser consent submission. Requires the signed-in identity session, its CSRF token and the single-use auth_token from the consent page. Approval redirects with an authorization code; denial redirects with access_denied.",
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/x-www-form-urlencoded": {
-                            "schema": {
-                                "$ref": "#/components/schemas/OAuthConsentRequest"
-                            }
-                        }
-                    }
-                }
-            },
-            "delete": {
-                "operationId": "oidc.deny.delete",
-                "tags": ["Auth"],
-                "responses": {
-                    "403": {
-                        "description": "The consent auth_token is invalid or has already been used."
-                    },
-                    "419": {
-                        "description": "The browser CSRF token is missing or expired."
-                    },
-                    "302": {
-                        "description": "Redirect to sign-in, a required action, the client callback or the post-logout destination.",
-                        "headers": {
-                            "Location": {
-                                "schema": {
-                                    "type": "string",
-                                    "format": "uri-reference"
-                                }
-                            }
-                        }
-                    },
-                    "400": {
-                        "description": "Invalid request before a trusted client redirect can be selected.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/OAuthError"
-                                }
-                            }
-                        }
-                    },
-                    "409": {
-                        "description": "External redirect for an Inertia request.",
-                        "headers": {
-                            "X-Inertia-Location": {
-                                "schema": {
-                                    "type": "string",
-                                    "format": "uri-reference"
-                                }
-                            }
-                        }
-                    }
-                },
-                "security": [],
-                "servers": [
-                    {
-                        "url": "https://lock.example"
-                    }
-                ],
-                "summary": "Deny authorization consent",
-                "description": "Browser consent submission. Requires the signed-in identity session, its CSRF token and the single-use auth_token from the consent page. Approval redirects with an authorization code; denial redirects with access_denied.",
-                "requestBody": {
-                    "required": true,
-                    "content": {
-                        "application/x-www-form-urlencoded": {
-                            "schema": {
-                                "$ref": "#/components/schemas/OAuthConsentRequest"
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "/oauth/userinfo": {
-            "get": {
-                "operationId": "oidc.userinfo.get",
-                "tags": ["User"],
-                "responses": {
-                    "200": {
-                        "description": "The subject and the claims released to this client.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/OidcUserinfo"
-                                }
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Missing or invalid user access token. When no token is supplied the response body is empty; otherwise it contains invalid_token.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/OAuthError"
-                                }
-                            }
-                        },
-                        "headers": {
-                            "WWW-Authenticate": {
-                                "schema": {
-                                    "type": "string"
-                                },
-                                "description": "Bearer challenge, with invalid_token when credentials were supplied."
-                            }
-                        }
-                    },
-                    "403": {
-                        "description": "The access token does not grant openid (insufficient_scope).",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/OAuthError"
-                                }
-                            }
-                        },
-                        "headers": {
-                            "WWW-Authenticate": {
-                                "schema": {
-                                    "type": "string"
-                                }
-                            }
-                        }
-                    }
-                },
-                "security": [
-                    {
-                        "protocolBearer": []
-                    }
-                ],
-                "servers": [
-                    {
-                        "url": "https://lock.example"
-                    }
-                ],
-                "summary": "Read the authenticated user\u2019s claims",
-                "description": "Send a user access token in the Authorization: Bearer header. The token must include the openid scope. Service tokens are rejected. Additional claims depend on the granted scopes and the realm\u2019s claim resolvers. Compare sub with the ID token\u2019s subject."
-            },
-            "post": {
-                "operationId": "oidc.userinfo.post",
-                "tags": ["User"],
-                "responses": {
-                    "200": {
-                        "description": "The subject and the claims released to this client.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/OidcUserinfo"
-                                }
-                            }
-                        }
-                    },
-                    "401": {
-                        "description": "Missing or invalid user access token. When no token is supplied the response body is empty; otherwise it contains invalid_token.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/OAuthError"
-                                }
-                            }
-                        },
-                        "headers": {
-                            "WWW-Authenticate": {
-                                "schema": {
-                                    "type": "string"
-                                },
-                                "description": "Bearer challenge, with invalid_token when credentials were supplied."
-                            }
-                        }
-                    },
-                    "403": {
-                        "description": "The access token does not grant openid (insufficient_scope).",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/OAuthError"
-                                }
-                            }
-                        },
-                        "headers": {
-                            "WWW-Authenticate": {
-                                "schema": {
-                                    "type": "string"
-                                }
-                            }
-                        }
-                    }
-                },
-                "security": [
-                    {
-                        "protocolBearer": []
-                    }
-                ],
-                "servers": [
-                    {
-                        "url": "https://lock.example"
-                    }
-                ],
-                "summary": "Read the authenticated user\u2019s claims",
-                "description": "Send a user access token in the Authorization: Bearer header. The token must include the openid scope. Service tokens are rejected. Additional claims depend on the granted scopes and the realm\u2019s claim resolvers. Compare sub with the ID token\u2019s subject."
-            }
-        },
-        "/.well-known/openid-configuration": {
-            "get": {
-                "operationId": "oidc.discovery.get",
-                "tags": ["Discovery"],
-                "responses": {
-                    "200": {
-                        "description": "OpenID Connect and OAuth authorization-server metadata.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/OidcProviderMetadata"
-                                }
-                            }
-                        },
-                        "headers": {
-                            "Cache-Control": {
-                                "schema": {
-                                    "type": "string"
-                                },
-                                "description": "Publicly cacheable for 3600 seconds."
-                            }
-                        }
-                    }
-                },
-                "security": [],
-                "servers": [
-                    {
-                        "url": "https://lock.example"
-                    }
-                ],
-                "summary": "Discover provider capabilities",
-                "description": "The request host selects the realm. Endpoint URLs, scopes and optional capabilities describe that realm. The registration endpoint is advertised only when dynamic registration is enabled."
-            }
-        },
-        "/.well-known/oauth-authorization-server": {
-            "get": {
-                "operationId": "oidc.authorization-server.get.8ca0eddb",
-                "tags": ["Discovery"],
-                "responses": {
-                    "200": {
-                        "description": "OpenID Connect and OAuth authorization-server metadata.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/OidcProviderMetadata"
-                                }
-                            }
-                        },
-                        "headers": {
-                            "Cache-Control": {
-                                "schema": {
-                                    "type": "string"
-                                },
-                                "description": "Publicly cacheable for 3600 seconds."
-                            }
-                        }
-                    }
-                },
-                "security": [],
-                "servers": [
-                    {
-                        "url": "https://lock.example"
-                    }
-                ],
-                "summary": "Discover provider capabilities",
-                "description": "The request host selects the realm. Endpoint URLs, scopes and optional capabilities describe that realm. The registration endpoint is advertised only when dynamic registration is enabled.",
-                "parameters": []
-            }
-        },
-        "/.well-known/oauth-authorization-server/{path}": {
-            "get": {
-                "operationId": "oidc.authorization-server.get.09f364ce",
-                "tags": ["Discovery"],
-                "parameters": [
-                    {
-                        "in": "path",
-                        "name": "path",
-                        "required": true,
-                        "description": "Optional suffix accepted by the server. In domain-based realm routing the host selects the issuer and this suffix does not change the metadata.",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OpenID Connect and OAuth authorization-server metadata.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/OidcProviderMetadata"
-                                }
-                            }
-                        },
-                        "headers": {
-                            "Cache-Control": {
-                                "schema": {
-                                    "type": "string"
-                                },
-                                "description": "Publicly cacheable for 3600 seconds."
-                            }
-                        }
-                    }
-                },
-                "security": [],
-                "servers": [
-                    {
-                        "url": "https://lock.example"
-                    }
-                ],
-                "summary": "Discover provider capabilities",
-                "description": "The request host selects the realm. Endpoint URLs, scopes and optional capabilities describe that realm. The registration endpoint is advertised only when dynamic registration is enabled."
-            }
-        },
-        "/.well-known/jwks.json": {
-            "get": {
-                "operationId": "oidc.jwks.get",
-                "tags": ["Discovery"],
-                "responses": {
-                    "200": {
-                        "description": "JSON Web Key Set.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/OidcJwks"
-                                }
-                            }
-                        },
-                        "headers": {
-                            "Cache-Control": {
-                                "schema": {
-                                    "type": "string"
-                                },
-                                "description": "Publicly cacheable for 3600 seconds."
-                            }
-                        }
-                    }
-                },
-                "security": [],
-                "servers": [
-                    {
-                        "url": "https://lock.example"
-                    }
-                ],
-                "summary": "Get public signing keys",
-                "description": "Public RSA keys for validating tokens issued by this realm."
-            }
-        },
-        "/.well-known/oauth-protected-resource": {
-            "get": {
-                "operationId": "oidc.protected-resource.get.0e6f2ef1",
-                "tags": ["Discovery"],
-                "responses": {
-                    "200": {
-                        "description": "Protected-resource metadata.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/OAuthProtectedResource"
-                                }
-                            }
-                        },
-                        "headers": {
-                            "Cache-Control": {
-                                "schema": {
-                                    "type": "string"
-                                },
-                                "description": "Publicly cacheable for 3600 seconds."
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "No resource is configured for this path."
-                    }
-                },
-                "security": [],
-                "servers": [
-                    {
-                        "url": "https://lock.example"
-                    }
-                ],
-                "summary": "Discover a protected resource",
-                "description": "Discover a configured resource at the issuer root or a path relative to it. Unknown resources return 404.",
-                "parameters": []
-            }
-        },
-        "/.well-known/oauth-protected-resource/{path}": {
-            "get": {
-                "operationId": "oidc.protected-resource.get.fa79234b",
-                "tags": ["Discovery"],
-                "parameters": [
-                    {
-                        "in": "path",
-                        "name": "path",
-                        "required": true,
-                        "description": "Resource path relative to the issuer, for example api. Omit the suffix for a resource at the issuer root.",
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "Protected-resource metadata.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "$ref": "#/components/schemas/OAuthProtectedResource"
-                                }
-                            }
-                        },
-                        "headers": {
-                            "Cache-Control": {
-                                "schema": {
-                                    "type": "string"
-                                },
-                                "description": "Publicly cacheable for 3600 seconds."
-                            }
-                        }
-                    },
-                    "404": {
-                        "description": "No resource is configured for this path."
-                    }
-                },
-                "security": [],
-                "servers": [
-                    {
-                        "url": "https://lock.example"
-                    }
-                ],
-                "summary": "Discover a protected resource",
-                "description": "Discover a configured resource at the issuer root or a path relative to it. Unknown resources return 404."
+                "x-group": "management"
             }
         }
     },
@@ -4518,6 +2526,98 @@
             }
         },
         "schemas": {
+            "AuthorizationCodeRequest": {
+                "type": "object",
+                "title": "Authorization code",
+                "required": ["grant_type", "code", "code_verifier"],
+                "properties": {
+                    "client_id": {
+                        "type": "string",
+                        "description": "Required for form-secret and public-client authentication. Omit when using HTTP Basic."
+                    },
+                    "client_secret": {
+                        "type": "string",
+                        "description": "Required only for client_secret_post. Never combine with HTTP Basic."
+                    },
+                    "scope": {
+                        "type": "string",
+                        "description": "Space-delimited scopes for client credentials, refresh or exchange. Refresh and exchange can only narrow granted scopes; authorization-code redemption uses the approved scopes."
+                    },
+                    "resource": {
+                        "oneOf": [
+                            {
+                                "type": "string",
+                                "format": "uri"
+                            },
+                            {
+                                "type": "array",
+                                "items": {
+                                    "type": "string",
+                                    "format": "uri"
+                                }
+                            }
+                        ],
+                        "description": "Absolute protected-resource URI without a fragment, or an array of such URIs using resource[] fields. Authorization and client-credentials requests default to the realm audience. Code and refresh grants preserve the original audiences when omitted, or narrow them when supplied."
+                    },
+                    "grant_type": {
+                        "type": "string",
+                        "enum": ["authorization_code"]
+                    },
+                    "code": {
+                        "type": "string"
+                    },
+                    "code_verifier": {
+                        "type": "string",
+                        "minLength": 43,
+                        "maxLength": 128,
+                        "pattern": "^[A-Za-z0-9._~-]+$"
+                    },
+                    "redirect_uri": {
+                        "type": "string",
+                        "format": "uri",
+                        "description": "Required if supplied in the authorization request; must match it exactly."
+                    }
+                }
+            },
+            "ClientCredentialsRequest": {
+                "type": "object",
+                "title": "Client credentials",
+                "required": ["grant_type"],
+                "properties": {
+                    "client_id": {
+                        "type": "string",
+                        "description": "Required for form-secret and public-client authentication. Omit when using HTTP Basic."
+                    },
+                    "client_secret": {
+                        "type": "string",
+                        "description": "Required only for client_secret_post. Never combine with HTTP Basic."
+                    },
+                    "scope": {
+                        "type": "string",
+                        "description": "Space-delimited scopes for client credentials, refresh or exchange. Refresh and exchange can only narrow granted scopes; authorization-code redemption uses the approved scopes."
+                    },
+                    "resource": {
+                        "oneOf": [
+                            {
+                                "type": "string",
+                                "format": "uri"
+                            },
+                            {
+                                "type": "array",
+                                "items": {
+                                    "type": "string",
+                                    "format": "uri"
+                                }
+                            }
+                        ],
+                        "description": "Absolute protected-resource URI without a fragment, or an array of such URIs using resource[] fields. Authorization and client-credentials requests default to the realm audience. Code and refresh grants preserve the original audiences when omitted, or narrow them when supplied."
+                    },
+                    "grant_type": {
+                        "type": "string",
+                        "enum": ["client_credentials"]
+                    }
+                }
+            },
             "ClientData": {
                 "type": "object",
                 "properties": {
@@ -5174,194 +3274,30 @@
                 }
             },
             "OAuthTokenRequest": {
+                "type": "object",
                 "oneOf": [
                     {
-                        "type": "object",
-                        "title": "Authorization code",
-                        "required": ["grant_type", "code", "code_verifier"],
-                        "properties": {
-                            "client_id": {
-                                "type": "string",
-                                "description": "Required for form-secret and public-client authentication. Omit when using HTTP Basic."
-                            },
-                            "client_secret": {
-                                "type": "string",
-                                "description": "Required only for client_secret_post. Never combine with HTTP Basic."
-                            },
-                            "scope": {
-                                "type": "string",
-                                "description": "Space-delimited scopes for client credentials, refresh or exchange. Refresh and exchange can only narrow granted scopes; authorization-code redemption uses the approved scopes."
-                            },
-                            "resource": {
-                                "oneOf": [
-                                    {
-                                        "type": "string",
-                                        "format": "uri"
-                                    },
-                                    {
-                                        "type": "array",
-                                        "items": {
-                                            "type": "string",
-                                            "format": "uri"
-                                        }
-                                    }
-                                ],
-                                "description": "Absolute protected-resource URI without a fragment, or an array of such URIs using resource[] fields. Authorization and client-credentials requests default to the realm audience. Code and refresh grants preserve the original audiences when omitted, or narrow them when supplied."
-                            },
-                            "grant_type": {
-                                "type": "string",
-                                "enum": ["authorization_code"]
-                            },
-                            "code": {
-                                "type": "string"
-                            },
-                            "code_verifier": {
-                                "type": "string",
-                                "minLength": 43,
-                                "maxLength": 128,
-                                "pattern": "^[A-Za-z0-9._~-]+$"
-                            },
-                            "redirect_uri": {
-                                "type": "string",
-                                "format": "uri",
-                                "description": "Required if supplied in the authorization request; must match it exactly."
-                            }
-                        }
+                        "$ref": "#/components/schemas/AuthorizationCodeRequest"
                     },
                     {
-                        "type": "object",
-                        "title": "Refresh token",
-                        "required": ["grant_type", "refresh_token"],
-                        "properties": {
-                            "client_id": {
-                                "type": "string",
-                                "description": "Required for form-secret and public-client authentication. Omit when using HTTP Basic."
-                            },
-                            "client_secret": {
-                                "type": "string",
-                                "description": "Required only for client_secret_post. Never combine with HTTP Basic."
-                            },
-                            "scope": {
-                                "type": "string",
-                                "description": "Space-delimited scopes for client credentials, refresh or exchange. Refresh and exchange can only narrow granted scopes; authorization-code redemption uses the approved scopes."
-                            },
-                            "resource": {
-                                "oneOf": [
-                                    {
-                                        "type": "string",
-                                        "format": "uri"
-                                    },
-                                    {
-                                        "type": "array",
-                                        "items": {
-                                            "type": "string",
-                                            "format": "uri"
-                                        }
-                                    }
-                                ],
-                                "description": "Absolute protected-resource URI without a fragment, or an array of such URIs using resource[] fields. Authorization and client-credentials requests default to the realm audience. Code and refresh grants preserve the original audiences when omitted, or narrow them when supplied."
-                            },
-                            "grant_type": {
-                                "type": "string",
-                                "enum": ["refresh_token"]
-                            },
-                            "refresh_token": {
-                                "type": "string"
-                            }
-                        }
+                        "$ref": "#/components/schemas/RefreshTokenRequest"
                     },
                     {
-                        "type": "object",
-                        "title": "Client credentials",
-                        "required": ["grant_type"],
-                        "properties": {
-                            "client_id": {
-                                "type": "string",
-                                "description": "Required for form-secret and public-client authentication. Omit when using HTTP Basic."
-                            },
-                            "client_secret": {
-                                "type": "string",
-                                "description": "Required only for client_secret_post. Never combine with HTTP Basic."
-                            },
-                            "scope": {
-                                "type": "string",
-                                "description": "Space-delimited scopes for client credentials, refresh or exchange. Refresh and exchange can only narrow granted scopes; authorization-code redemption uses the approved scopes."
-                            },
-                            "resource": {
-                                "oneOf": [
-                                    {
-                                        "type": "string",
-                                        "format": "uri"
-                                    },
-                                    {
-                                        "type": "array",
-                                        "items": {
-                                            "type": "string",
-                                            "format": "uri"
-                                        }
-                                    }
-                                ],
-                                "description": "Absolute protected-resource URI without a fragment, or an array of such URIs using resource[] fields. Authorization and client-credentials requests default to the realm audience. Code and refresh grants preserve the original audiences when omitted, or narrow them when supplied."
-                            },
-                            "grant_type": {
-                                "type": "string",
-                                "enum": ["client_credentials"]
-                            }
-                        }
+                        "$ref": "#/components/schemas/ClientCredentialsRequest"
                     },
                     {
-                        "type": "object",
-                        "title": "Token exchange",
-                        "required": ["grant_type", "subject_token", "subject_token_type"],
-                        "anyOf": [
-                            {
-                                "required": ["audience"]
-                            },
-                            {
-                                "required": ["resource"]
-                            }
-                        ],
-                        "properties": {
-                            "resource": {
-                                "type": "string",
-                                "format": "uri",
-                                "description": "Single target audience. Must agree with audience when both are supplied."
-                            },
-                            "client_id": {
-                                "type": "string",
-                                "description": "Required for form-secret and public-client authentication. Omit when using HTTP Basic."
-                            },
-                            "client_secret": {
-                                "type": "string",
-                                "description": "Required only for client_secret_post. Never combine with HTTP Basic."
-                            },
-                            "scope": {
-                                "type": "string",
-                                "description": "Space-delimited scopes for client credentials, refresh or exchange. Refresh and exchange can only narrow granted scopes; authorization-code redemption uses the approved scopes."
-                            },
-                            "grant_type": {
-                                "type": "string",
-                                "enum": ["urn:ietf:params:oauth:grant-type:token-exchange"]
-                            },
-                            "subject_token": {
-                                "type": "string"
-                            },
-                            "subject_token_type": {
-                                "type": "string",
-                                "enum": ["urn:ietf:params:oauth:token-type:access_token"]
-                            },
-                            "requested_token_type": {
-                                "type": "string",
-                                "enum": ["urn:ietf:params:oauth:token-type:access_token"]
-                            },
-                            "audience": {
-                                "type": "string",
-                                "description": "Required unless resource is supplied; when both are supplied, they must match."
-                            }
-                        },
-                        "description": "actor_token and actor_token_type are unsupported. Additional grant parameters may be consumed by configured token-exchange extensions."
+                        "$ref": "#/components/schemas/TokenExchangeRequest"
                     }
-                ]
+                ],
+                "discriminator": {
+                    "propertyName": "grant_type",
+                    "mapping": {
+                        "authorization_code": "#/components/schemas/AuthorizationCodeRequest",
+                        "refresh_token": "#/components/schemas/RefreshTokenRequest",
+                        "client_credentials": "#/components/schemas/ClientCredentialsRequest",
+                        "urn:ietf:params:oauth:grant-type:token-exchange": "#/components/schemas/TokenExchangeRequest"
+                    }
+                }
             },
             "OAuthTokenResponse": {
                 "type": "object",
@@ -6041,6 +3977,48 @@
                 },
                 "title": "RealmSettingsPatch"
             },
+            "RefreshTokenRequest": {
+                "type": "object",
+                "title": "Refresh token",
+                "required": ["grant_type", "refresh_token"],
+                "properties": {
+                    "client_id": {
+                        "type": "string",
+                        "description": "Required for form-secret and public-client authentication. Omit when using HTTP Basic."
+                    },
+                    "client_secret": {
+                        "type": "string",
+                        "description": "Required only for client_secret_post. Never combine with HTTP Basic."
+                    },
+                    "scope": {
+                        "type": "string",
+                        "description": "Space-delimited scopes for client credentials, refresh or exchange. Refresh and exchange can only narrow granted scopes; authorization-code redemption uses the approved scopes."
+                    },
+                    "resource": {
+                        "oneOf": [
+                            {
+                                "type": "string",
+                                "format": "uri"
+                            },
+                            {
+                                "type": "array",
+                                "items": {
+                                    "type": "string",
+                                    "format": "uri"
+                                }
+                            }
+                        ],
+                        "description": "Absolute protected-resource URI without a fragment, or an array of such URIs using resource[] fields. Authorization and client-credentials requests default to the realm audience. Code and refresh grants preserve the original audiences when omitted, or narrow them when supplied."
+                    },
+                    "grant_type": {
+                        "type": "string",
+                        "enum": ["refresh_token"]
+                    },
+                    "refresh_token": {
+                        "type": "string"
+                    }
+                }
+            },
             "ResourceData": {
                 "type": "object",
                 "properties": {
@@ -6237,6 +4215,58 @@
                 "description": "RFC 7591 \u00a72 / OIDC Registration \u00a72: how a client authenticates at the token, introspection and revocation endpoints. Enforced exactly: a client registered for one method is refused when it presents another.\n",
                 "enum": ["client_secret_basic", "client_secret_post", "none"],
                 "title": "TokenEndpointAuthMethod"
+            },
+            "TokenExchangeRequest": {
+                "type": "object",
+                "title": "Token exchange",
+                "required": ["grant_type", "subject_token", "subject_token_type"],
+                "anyOf": [
+                    {
+                        "required": ["audience"]
+                    },
+                    {
+                        "required": ["resource"]
+                    }
+                ],
+                "properties": {
+                    "resource": {
+                        "type": "string",
+                        "format": "uri",
+                        "description": "Single target audience. Must agree with audience when both are supplied."
+                    },
+                    "client_id": {
+                        "type": "string",
+                        "description": "Required for form-secret and public-client authentication. Omit when using HTTP Basic."
+                    },
+                    "client_secret": {
+                        "type": "string",
+                        "description": "Required only for client_secret_post. Never combine with HTTP Basic."
+                    },
+                    "scope": {
+                        "type": "string",
+                        "description": "Space-delimited scopes for client credentials, refresh or exchange. Refresh and exchange can only narrow granted scopes; authorization-code redemption uses the approved scopes."
+                    },
+                    "grant_type": {
+                        "type": "string",
+                        "enum": ["urn:ietf:params:oauth:grant-type:token-exchange"]
+                    },
+                    "subject_token": {
+                        "type": "string"
+                    },
+                    "subject_token_type": {
+                        "type": "string",
+                        "enum": ["urn:ietf:params:oauth:token-type:access_token"]
+                    },
+                    "requested_token_type": {
+                        "type": "string",
+                        "enum": ["urn:ietf:params:oauth:token-type:access_token"]
+                    },
+                    "audience": {
+                        "type": "string",
+                        "description": "Required unless resource is supplied; when both are supplied, they must match."
+                    }
+                },
+                "description": "actor_token and actor_token_type are unsupported. Additional grant parameters may be consumed by configured token-exchange extensions."
             },
             "UpdateClientData": {
                 "type": "object",

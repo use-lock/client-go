@@ -1,5 +1,5 @@
-package: management
-output: management/client.gen.go
+package: auth
+output: auth/client.gen.go
 generate:
   models: true
   client: true

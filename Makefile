@@ -1,4 +1,4 @@
-OPENAPI_SOURCE ?= ../lock/openapi.json
+OPENAPI_DIR ?= ../lock
 
 .PHONY: generate sync-openapi test check
 
@@ -6,7 +6,9 @@ generate:
 	go generate ./...
 
 sync-openapi:
-	cp "$(OPENAPI_SOURCE)" openapi/lock.json
+	cp "$(OPENAPI_DIR)/openapi.admin.json" openapi/admin.json
+	cp "$(OPENAPI_DIR)/openapi.auth.json" openapi/auth.json
+	cp "$(OPENAPI_DIR)/openapi.management.json" openapi/management.json
 	$(MAKE) generate
 
 test:
