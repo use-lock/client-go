@@ -217,36 +217,6 @@ func (e GetRealm403JSONResponseBodyError) Valid() bool {
 	}
 }
 
-// Defines values for PatchRealm401JSONResponseBodyError.
-const (
-	PatchRealm401JSONResponseBodyErrorInvalidToken PatchRealm401JSONResponseBodyError = "invalid_token"
-)
-
-// Valid indicates whether the value is a known member of the PatchRealm401JSONResponseBodyError enum.
-func (e PatchRealm401JSONResponseBodyError) Valid() bool {
-	switch e {
-	case PatchRealm401JSONResponseBodyErrorInvalidToken:
-		return true
-	default:
-		return false
-	}
-}
-
-// Defines values for PatchRealm403JSONResponseBodyError.
-const (
-	PatchRealm403JSONResponseBodyErrorInsufficientScope PatchRealm403JSONResponseBodyError = "insufficient_scope"
-)
-
-// Valid indicates whether the value is a known member of the PatchRealm403JSONResponseBodyError enum.
-func (e PatchRealm403JSONResponseBodyError) Valid() bool {
-	switch e {
-	case PatchRealm403JSONResponseBodyErrorInsufficientScope:
-		return true
-	default:
-		return false
-	}
-}
-
 // Defines values for UpdateRealm401JSONResponseBodyError.
 const (
 	UpdateRealm401JSONResponseBodyErrorInvalidToken UpdateRealm401JSONResponseBodyError = "invalid_token"
@@ -635,12 +605,6 @@ type GetRealm401JSONResponseBodyError string
 // GetRealm403JSONResponseBodyError defines parameters for GetRealm.
 type GetRealm403JSONResponseBodyError string
 
-// PatchRealm401JSONResponseBodyError defines parameters for PatchRealm.
-type PatchRealm401JSONResponseBodyError string
-
-// PatchRealm403JSONResponseBodyError defines parameters for PatchRealm.
-type PatchRealm403JSONResponseBodyError string
-
 // UpdateRealm401JSONResponseBodyError defines parameters for UpdateRealm.
 type UpdateRealm401JSONResponseBodyError string
 
@@ -649,9 +613,6 @@ type UpdateRealm403JSONResponseBodyError string
 
 // CreateRealmJSONRequestBody defines body for CreateRealm for application/json ContentType.
 type CreateRealmJSONRequestBody = CreateRealmData
-
-// PatchRealmJSONRequestBody defines body for PatchRealm for application/json ContentType.
-type PatchRealmJSONRequestBody = UpdateRealmData
 
 // UpdateRealmJSONRequestBody defines body for UpdateRealm for application/json ContentType.
 type UpdateRealmJSONRequestBody = UpdateRealmData
@@ -774,28 +735,6 @@ type ClientInterface interface {
 	// Corresponds with GET /v1/realms/{realm} (the `GetRealm` operationId).
 	GetRealm(ctx context.Context, realm string, reqEditors ...RequestEditorFn) (*RealmResponse, error)
 
-	// PatchRealmWithBody Update a realm
-	//
-	// A realm's slug is immutable. Settings left out of `settings` keep
-	// their current value. Re-pointing the domain changes the issuer of every
-	// token the realm mints and restarts the domain check.
-	//
-	// Takes any type of body and a specified content type.
-	//
-	// Corresponds with PATCH /v1/realms/{realm} (the `PatchRealm` operationId).
-	PatchRealmWithBody(ctx context.Context, realm string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*RealmResponse, error)
-
-	// PatchRealm Update a realm
-	//
-	// A realm's slug is immutable. Settings left out of `settings` keep
-	// their current value. Re-pointing the domain changes the issuer of every
-	// token the realm mints and restarts the domain check.
-	//
-	// Takes a body of the `application/json` content type.
-	//
-	// Corresponds with PATCH /v1/realms/{realm} (the `PatchRealm` operationId).
-	PatchRealm(ctx context.Context, realm string, body PatchRealmJSONRequestBody, reqEditors ...RequestEditorFn) (*RealmResponse, error)
-
 	// UpdateRealmWithBody Update a realm
 	//
 	// A realm's slug is immutable. Settings left out of `settings` keep
@@ -804,7 +743,7 @@ type ClientInterface interface {
 	//
 	// Takes any type of body and a specified content type.
 	//
-	// Corresponds with PUT /v1/realms/{realm} (the `UpdateRealm` operationId).
+	// Corresponds with PATCH /v1/realms/{realm} (the `UpdateRealm` operationId).
 	UpdateRealmWithBody(ctx context.Context, realm string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*RealmResponse, error)
 
 	// UpdateRealm Update a realm
@@ -815,7 +754,7 @@ type ClientInterface interface {
 	//
 	// Takes a body of the `application/json` content type.
 	//
-	// Corresponds with PUT /v1/realms/{realm} (the `UpdateRealm` operationId).
+	// Corresponds with PATCH /v1/realms/{realm} (the `UpdateRealm` operationId).
 	UpdateRealm(ctx context.Context, realm string, body UpdateRealmJSONRequestBody, reqEditors ...RequestEditorFn) (*RealmResponse, error)
 }
 
@@ -913,48 +852,6 @@ func (c *Client) GetRealm(ctx context.Context, realm string, reqEditors ...Reque
 	return transport.Execute[RealmResponse](c.Client, req, true, 200)
 }
 
-// PatchRealmWithBody Update a realm
-//
-// A realm's slug is immutable. Settings left out of `settings` keep
-// their current value. Re-pointing the domain changes the issuer of every
-// token the realm mints and restarts the domain check.
-//
-// Takes any type of body and a specified content type.
-//
-// Corresponds with PATCH /v1/realms/{realm} (the `PatchRealm` operationId).
-func (c *Client) PatchRealmWithBody(ctx context.Context, realm string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*RealmResponse, error) {
-	req, err := NewPatchRealmRequestWithBody(c.Server, realm, contentType, body)
-	if err != nil {
-		return nil, err
-	}
-	req = req.WithContext(ctx)
-	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
-		return nil, err
-	}
-	return transport.Execute[RealmResponse](c.Client, req, true, 200)
-}
-
-// PatchRealm Update a realm
-//
-// A realm's slug is immutable. Settings left out of `settings` keep
-// their current value. Re-pointing the domain changes the issuer of every
-// token the realm mints and restarts the domain check.
-//
-// Takes a body of the `application/json` content type.
-//
-// Corresponds with PATCH /v1/realms/{realm} (the `PatchRealm` operationId).
-func (c *Client) PatchRealm(ctx context.Context, realm string, body PatchRealmJSONRequestBody, reqEditors ...RequestEditorFn) (*RealmResponse, error) {
-	req, err := NewPatchRealmRequest(c.Server, realm, body)
-	if err != nil {
-		return nil, err
-	}
-	req = req.WithContext(ctx)
-	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
-		return nil, err
-	}
-	return transport.Execute[RealmResponse](c.Client, req, true, 200)
-}
-
 // UpdateRealmWithBody Update a realm
 //
 // A realm's slug is immutable. Settings left out of `settings` keep
@@ -963,7 +860,7 @@ func (c *Client) PatchRealm(ctx context.Context, realm string, body PatchRealmJS
 //
 // Takes any type of body and a specified content type.
 //
-// Corresponds with PUT /v1/realms/{realm} (the `UpdateRealm` operationId).
+// Corresponds with PATCH /v1/realms/{realm} (the `UpdateRealm` operationId).
 func (c *Client) UpdateRealmWithBody(ctx context.Context, realm string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*RealmResponse, error) {
 	req, err := NewUpdateRealmRequestWithBody(c.Server, realm, contentType, body)
 	if err != nil {
@@ -984,7 +881,7 @@ func (c *Client) UpdateRealmWithBody(ctx context.Context, realm string, contentT
 //
 // Takes a body of the `application/json` content type.
 //
-// Corresponds with PUT /v1/realms/{realm} (the `UpdateRealm` operationId).
+// Corresponds with PATCH /v1/realms/{realm} (the `UpdateRealm` operationId).
 func (c *Client) UpdateRealm(ctx context.Context, realm string, body UpdateRealmJSONRequestBody, reqEditors ...RequestEditorFn) (*RealmResponse, error) {
 	req, err := NewUpdateRealmRequest(c.Server, realm, body)
 	if err != nil {
@@ -1231,53 +1128,6 @@ func NewGetRealmRequest(server string, realm string) (*http.Request, error) {
 	return req, nil
 }
 
-// NewPatchRealmRequest calls the generic PatchRealm builder with application/json body
-func NewPatchRealmRequest(server string, realm string, body PatchRealmJSONRequestBody) (*http.Request, error) {
-	var bodyReader io.Reader
-	buf, err := json.Marshal(body)
-	if err != nil {
-		return nil, err
-	}
-	bodyReader = bytes.NewReader(buf)
-	return NewPatchRealmRequestWithBody(server, realm, "application/json", bodyReader)
-}
-
-// NewPatchRealmRequestWithBody constructs an http.Request for the PatchRealm method, with any body, and a specified content type
-func NewPatchRealmRequestWithBody(server string, realm string, contentType string, body io.Reader) (*http.Request, error) {
-	var err error
-
-	var pathParam0 string
-
-	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "realm", realm, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "string", Format: ""})
-	if err != nil {
-		return nil, err
-	}
-
-	serverURL, err := url.Parse(server)
-	if err != nil {
-		return nil, err
-	}
-
-	operationPath := fmt.Sprintf("/v1/realms/%s", pathParam0)
-	if operationPath[0] == '/' {
-		operationPath = "." + operationPath
-	}
-
-	queryURL, err := serverURL.Parse(operationPath)
-	if err != nil {
-		return nil, err
-	}
-
-	req, err := http.NewRequest(http.MethodPatch, queryURL.String(), body)
-	if err != nil {
-		return nil, err
-	}
-
-	req.Header.Add("Content-Type", contentType)
-
-	return req, nil
-}
-
 // NewUpdateRealmRequest calls the generic UpdateRealm builder with application/json body
 func NewUpdateRealmRequest(server string, realm string, body UpdateRealmJSONRequestBody) (*http.Request, error) {
 	var bodyReader io.Reader
@@ -1315,7 +1165,7 @@ func NewUpdateRealmRequestWithBody(server string, realm string, contentType stri
 		return nil, err
 	}
 
-	req, err := http.NewRequest(http.MethodPut, queryURL.String(), body)
+	req, err := http.NewRequest(http.MethodPatch, queryURL.String(), body)
 	if err != nil {
 		return nil, err
 	}

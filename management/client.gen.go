@@ -256,36 +256,6 @@ func (e GetClient403JSONResponseBodyError) Valid() bool {
 	}
 }
 
-// Defines values for PatchClient401JSONResponseBodyError.
-const (
-	PatchClient401JSONResponseBodyErrorInvalidToken PatchClient401JSONResponseBodyError = "invalid_token"
-)
-
-// Valid indicates whether the value is a known member of the PatchClient401JSONResponseBodyError enum.
-func (e PatchClient401JSONResponseBodyError) Valid() bool {
-	switch e {
-	case PatchClient401JSONResponseBodyErrorInvalidToken:
-		return true
-	default:
-		return false
-	}
-}
-
-// Defines values for PatchClient403JSONResponseBodyError.
-const (
-	PatchClient403JSONResponseBodyErrorInsufficientScope PatchClient403JSONResponseBodyError = "insufficient_scope"
-)
-
-// Valid indicates whether the value is a known member of the PatchClient403JSONResponseBodyError enum.
-func (e PatchClient403JSONResponseBodyError) Valid() bool {
-	switch e {
-	case PatchClient403JSONResponseBodyErrorInsufficientScope:
-		return true
-	default:
-		return false
-	}
-}
-
 // Defines values for UpdateClient401JSONResponseBodyError.
 const (
 	UpdateClient401JSONResponseBodyErrorInvalidToken UpdateClient401JSONResponseBodyError = "invalid_token"
@@ -526,36 +496,6 @@ func (e GetResource403JSONResponseBodyError) Valid() bool {
 	}
 }
 
-// Defines values for PatchResource401JSONResponseBodyError.
-const (
-	PatchResource401JSONResponseBodyErrorInvalidToken PatchResource401JSONResponseBodyError = "invalid_token"
-)
-
-// Valid indicates whether the value is a known member of the PatchResource401JSONResponseBodyError enum.
-func (e PatchResource401JSONResponseBodyError) Valid() bool {
-	switch e {
-	case PatchResource401JSONResponseBodyErrorInvalidToken:
-		return true
-	default:
-		return false
-	}
-}
-
-// Defines values for PatchResource403JSONResponseBodyError.
-const (
-	PatchResource403JSONResponseBodyErrorInsufficientScope PatchResource403JSONResponseBodyError = "insufficient_scope"
-)
-
-// Valid indicates whether the value is a known member of the PatchResource403JSONResponseBodyError enum.
-func (e PatchResource403JSONResponseBodyError) Valid() bool {
-	switch e {
-	case PatchResource403JSONResponseBodyErrorInsufficientScope:
-		return true
-	default:
-		return false
-	}
-}
-
 // Defines values for UpdateResource401JSONResponseBodyError.
 const (
 	UpdateResource401JSONResponseBodyErrorInvalidToken UpdateResource401JSONResponseBodyError = "invalid_token"
@@ -736,36 +676,6 @@ func (e GetSocialProvider403JSONResponseBodyError) Valid() bool {
 	}
 }
 
-// Defines values for PatchSocialProvider401JSONResponseBodyError.
-const (
-	PatchSocialProvider401JSONResponseBodyErrorInvalidToken PatchSocialProvider401JSONResponseBodyError = "invalid_token"
-)
-
-// Valid indicates whether the value is a known member of the PatchSocialProvider401JSONResponseBodyError enum.
-func (e PatchSocialProvider401JSONResponseBodyError) Valid() bool {
-	switch e {
-	case PatchSocialProvider401JSONResponseBodyErrorInvalidToken:
-		return true
-	default:
-		return false
-	}
-}
-
-// Defines values for PatchSocialProvider403JSONResponseBodyError.
-const (
-	PatchSocialProvider403JSONResponseBodyErrorInsufficientScope PatchSocialProvider403JSONResponseBodyError = "insufficient_scope"
-)
-
-// Valid indicates whether the value is a known member of the PatchSocialProvider403JSONResponseBodyError enum.
-func (e PatchSocialProvider403JSONResponseBodyError) Valid() bool {
-	switch e {
-	case PatchSocialProvider403JSONResponseBodyErrorInsufficientScope:
-		return true
-	default:
-		return false
-	}
-}
-
 // Defines values for UpdateSocialProvider401JSONResponseBodyError.
 const (
 	UpdateSocialProvider401JSONResponseBodyErrorInvalidToken UpdateSocialProvider401JSONResponseBodyError = "invalid_token"
@@ -905,6 +815,9 @@ type CreateClientData struct {
 
 	// RedirectUris Where an authorization response may be sent back to. Required for the authorization code grant.
 	RedirectUris *[]string `json:"redirect_uris,omitempty"`
+
+	// Revoked Whether the client is revoked. Defaults to false when omitted.
+	Revoked *bool `json:"revoked,omitempty"`
 
 	// TokenEndpointAuthMethod How the client authenticates at the token endpoint. `none` makes it a public client with no secret.
 	TokenEndpointAuthMethod TokenEndpointAuthMethod `json:"token_endpoint_auth_method"`
@@ -1162,6 +1075,9 @@ type UpdateClientData struct {
 	// RedirectUris Where an authorization response may be sent back to. Replaces the current list.
 	RedirectUris *[]string `json:"redirect_uris,omitempty"`
 
+	// Revoked Whether the client is revoked. Omit to keep the current state; false restores the client.
+	Revoked *bool `json:"revoked,omitempty"`
+
 	// TokenEndpointAuthMethod How the client authenticates at the token endpoint. Turning a public client confidential mints a secret; the other way around drops it.
 	TokenEndpointAuthMethod *TokenEndpointAuthMethod `json:"token_endpoint_auth_method,omitempty"`
 }
@@ -1256,12 +1172,6 @@ type GetClient401JSONResponseBodyError string
 // GetClient403JSONResponseBodyError defines parameters for GetClient.
 type GetClient403JSONResponseBodyError string
 
-// PatchClient401JSONResponseBodyError defines parameters for PatchClient.
-type PatchClient401JSONResponseBodyError string
-
-// PatchClient403JSONResponseBodyError defines parameters for PatchClient.
-type PatchClient403JSONResponseBodyError string
-
 // UpdateClient401JSONResponseBodyError defines parameters for UpdateClient.
 type UpdateClient401JSONResponseBodyError string
 
@@ -1325,12 +1235,6 @@ type GetResource401JSONResponseBodyError string
 // GetResource403JSONResponseBodyError defines parameters for GetResource.
 type GetResource403JSONResponseBodyError string
 
-// PatchResource401JSONResponseBodyError defines parameters for PatchResource.
-type PatchResource401JSONResponseBodyError string
-
-// PatchResource403JSONResponseBodyError defines parameters for PatchResource.
-type PatchResource403JSONResponseBodyError string
-
 // UpdateResource401JSONResponseBodyError defines parameters for UpdateResource.
 type UpdateResource401JSONResponseBodyError string
 
@@ -1385,12 +1289,6 @@ type GetSocialProvider401JSONResponseBodyError string
 // GetSocialProvider403JSONResponseBodyError defines parameters for GetSocialProvider.
 type GetSocialProvider403JSONResponseBodyError string
 
-// PatchSocialProvider401JSONResponseBodyError defines parameters for PatchSocialProvider.
-type PatchSocialProvider401JSONResponseBodyError string
-
-// PatchSocialProvider403JSONResponseBodyError defines parameters for PatchSocialProvider.
-type PatchSocialProvider403JSONResponseBodyError string
-
 // UpdateSocialProvider401JSONResponseBodyError defines parameters for UpdateSocialProvider.
 type UpdateSocialProvider401JSONResponseBodyError string
 
@@ -1400,26 +1298,17 @@ type UpdateSocialProvider403JSONResponseBodyError string
 // CreateClientJSONRequestBody defines body for CreateClient for application/json ContentType.
 type CreateClientJSONRequestBody = CreateClientData
 
-// PatchClientJSONRequestBody defines body for PatchClient for application/json ContentType.
-type PatchClientJSONRequestBody = UpdateClientData
-
 // UpdateClientJSONRequestBody defines body for UpdateClient for application/json ContentType.
 type UpdateClientJSONRequestBody = UpdateClientData
 
 // CreateResourceJSONRequestBody defines body for CreateResource for application/json ContentType.
 type CreateResourceJSONRequestBody = CreateResourceData
 
-// PatchResourceJSONRequestBody defines body for PatchResource for application/json ContentType.
-type PatchResourceJSONRequestBody = UpdateResourceData
-
 // UpdateResourceJSONRequestBody defines body for UpdateResource for application/json ContentType.
 type UpdateResourceJSONRequestBody = UpdateResourceData
 
 // CreateSocialProviderJSONRequestBody defines body for CreateSocialProvider for application/json ContentType.
 type CreateSocialProviderJSONRequestBody = CreateSocialProviderData
-
-// PatchSocialProviderJSONRequestBody defines body for PatchSocialProvider for application/json ContentType.
-type PatchSocialProviderJSONRequestBody = UpdateSocialProviderData
 
 // UpdateSocialProviderJSONRequestBody defines body for UpdateSocialProvider for application/json ContentType.
 type UpdateSocialProviderJSONRequestBody = UpdateSocialProviderData
@@ -1536,28 +1425,6 @@ type ClientInterface interface {
 	// Corresponds with GET /v1/realms/{realm}/clients/{client} (the `GetClient` operationId).
 	GetClient(ctx context.Context, realm string, client string, reqEditors ...RequestEditorFn) (*ClientResponse, error)
 
-	// PatchClientWithBody Update a client
-	//
-	// A client's `client_id` is immutable, and everything left out of the
-	// payload keeps its current value. Turning a public client confidential
-	// mints a secret; the other way around drops it.
-	//
-	// Takes any type of body and a specified content type.
-	//
-	// Corresponds with PATCH /v1/realms/{realm}/clients/{client} (the `PatchClient` operationId).
-	PatchClientWithBody(ctx context.Context, realm string, client string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*ClientResponse, error)
-
-	// PatchClient Update a client
-	//
-	// A client's `client_id` is immutable, and everything left out of the
-	// payload keeps its current value. Turning a public client confidential
-	// mints a secret; the other way around drops it.
-	//
-	// Takes a body of the `application/json` content type.
-	//
-	// Corresponds with PATCH /v1/realms/{realm}/clients/{client} (the `PatchClient` operationId).
-	PatchClient(ctx context.Context, realm string, client string, body PatchClientJSONRequestBody, reqEditors ...RequestEditorFn) (*ClientResponse, error)
-
 	// UpdateClientWithBody Update a client
 	//
 	// A client's `client_id` is immutable, and everything left out of the
@@ -1566,7 +1433,7 @@ type ClientInterface interface {
 	//
 	// Takes any type of body and a specified content type.
 	//
-	// Corresponds with PUT /v1/realms/{realm}/clients/{client} (the `UpdateClient` operationId).
+	// Corresponds with PATCH /v1/realms/{realm}/clients/{client} (the `UpdateClient` operationId).
 	UpdateClientWithBody(ctx context.Context, realm string, client string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*ClientResponse, error)
 
 	// UpdateClient Update a client
@@ -1577,7 +1444,7 @@ type ClientInterface interface {
 	//
 	// Takes a body of the `application/json` content type.
 	//
-	// Corresponds with PUT /v1/realms/{realm}/clients/{client} (the `UpdateClient` operationId).
+	// Corresponds with PATCH /v1/realms/{realm}/clients/{client} (the `UpdateClient` operationId).
 	UpdateClient(ctx context.Context, realm string, client string, body UpdateClientJSONRequestBody, reqEditors ...RequestEditorFn) (*ClientResponse, error)
 
 	// RotateClientSecret performs a POST /v1/realms/{realm}/clients/{client}/rotate-secret (the `RotateClientSecret` operationId) request.
@@ -1617,31 +1484,13 @@ type ClientInterface interface {
 	// Corresponds with GET /v1/realms/{realm}/resources/{resource} (the `GetResource` operationId).
 	GetResource(ctx context.Context, realm string, resource string, reqEditors ...RequestEditorFn) (*ResourceResponse, error)
 
-	// PatchResourceWithBody Update a protected resource
-	//
-	// Fields left out retain their values. The built-in API resources are protected.
-	//
-	// Takes any type of body and a specified content type.
-	//
-	// Corresponds with PATCH /v1/realms/{realm}/resources/{resource} (the `PatchResource` operationId).
-	PatchResourceWithBody(ctx context.Context, realm string, resource string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*ResourceResponse, error)
-
-	// PatchResource Update a protected resource
-	//
-	// Fields left out retain their values. The built-in API resources are protected.
-	//
-	// Takes a body of the `application/json` content type.
-	//
-	// Corresponds with PATCH /v1/realms/{realm}/resources/{resource} (the `PatchResource` operationId).
-	PatchResource(ctx context.Context, realm string, resource string, body PatchResourceJSONRequestBody, reqEditors ...RequestEditorFn) (*ResourceResponse, error)
-
 	// UpdateResourceWithBody Update a protected resource
 	//
 	// Fields left out retain their values. The built-in API resources are protected.
 	//
 	// Takes any type of body and a specified content type.
 	//
-	// Corresponds with PUT /v1/realms/{realm}/resources/{resource} (the `UpdateResource` operationId).
+	// Corresponds with PATCH /v1/realms/{realm}/resources/{resource} (the `UpdateResource` operationId).
 	UpdateResourceWithBody(ctx context.Context, realm string, resource string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*ResourceResponse, error)
 
 	// UpdateResource Update a protected resource
@@ -1650,7 +1499,7 @@ type ClientInterface interface {
 	//
 	// Takes a body of the `application/json` content type.
 	//
-	// Corresponds with PUT /v1/realms/{realm}/resources/{resource} (the `UpdateResource` operationId).
+	// Corresponds with PATCH /v1/realms/{realm}/resources/{resource} (the `UpdateResource` operationId).
 	UpdateResource(ctx context.Context, realm string, resource string, body UpdateResourceJSONRequestBody, reqEditors ...RequestEditorFn) (*ResourceResponse, error)
 
 	// ListSocialProviders performs a GET /v1/realms/{realm}/social-providers (the `ListSocialProviders` operationId) request.
@@ -1670,19 +1519,11 @@ type ClientInterface interface {
 	// GetSocialProvider performs a GET /v1/realms/{realm}/social-providers/{social_provider} (the `GetSocialProvider` operationId) request.
 	GetSocialProvider(ctx context.Context, realm string, socialProvider string, reqEditors ...RequestEditorFn) (*SocialProviderResponse, error)
 
-	// PatchSocialProviderWithBody performs a PATCH /v1/realms/{realm}/social-providers/{social_provider} (the `PatchSocialProvider` operationId) request,
-	// with any type of body and a specified content type.
-	PatchSocialProviderWithBody(ctx context.Context, realm string, socialProvider string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*SocialProviderResponse, error)
-
-	// PatchSocialProvider performs a PATCH /v1/realms/{realm}/social-providers/{social_provider} (the `PatchSocialProvider` operationId) request.
-	// Takes a body of the `application/json` content type.
-	PatchSocialProvider(ctx context.Context, realm string, socialProvider string, body PatchSocialProviderJSONRequestBody, reqEditors ...RequestEditorFn) (*SocialProviderResponse, error)
-
-	// UpdateSocialProviderWithBody performs a PUT /v1/realms/{realm}/social-providers/{social_provider} (the `UpdateSocialProvider` operationId) request,
+	// UpdateSocialProviderWithBody performs a PATCH /v1/realms/{realm}/social-providers/{social_provider} (the `UpdateSocialProvider` operationId) request,
 	// with any type of body and a specified content type.
 	UpdateSocialProviderWithBody(ctx context.Context, realm string, socialProvider string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*SocialProviderResponse, error)
 
-	// UpdateSocialProvider performs a PUT /v1/realms/{realm}/social-providers/{social_provider} (the `UpdateSocialProvider` operationId) request.
+	// UpdateSocialProvider performs a PATCH /v1/realms/{realm}/social-providers/{social_provider} (the `UpdateSocialProvider` operationId) request.
 	// Takes a body of the `application/json` content type.
 	UpdateSocialProvider(ctx context.Context, realm string, socialProvider string, body UpdateSocialProviderJSONRequestBody, reqEditors ...RequestEditorFn) (*SocialProviderResponse, error)
 }
@@ -1775,48 +1616,6 @@ func (c *Client) GetClient(ctx context.Context, realm string, client string, req
 	return transport.Execute[ClientResponse](c.Client, req, true, 200)
 }
 
-// PatchClientWithBody Update a client
-//
-// A client's `client_id` is immutable, and everything left out of the
-// payload keeps its current value. Turning a public client confidential
-// mints a secret; the other way around drops it.
-//
-// Takes any type of body and a specified content type.
-//
-// Corresponds with PATCH /v1/realms/{realm}/clients/{client} (the `PatchClient` operationId).
-func (c *Client) PatchClientWithBody(ctx context.Context, realm string, client string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*ClientResponse, error) {
-	req, err := NewPatchClientRequestWithBody(c.Server, realm, client, contentType, body)
-	if err != nil {
-		return nil, err
-	}
-	req = req.WithContext(ctx)
-	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
-		return nil, err
-	}
-	return transport.Execute[ClientResponse](c.Client, req, true, 200)
-}
-
-// PatchClient Update a client
-//
-// A client's `client_id` is immutable, and everything left out of the
-// payload keeps its current value. Turning a public client confidential
-// mints a secret; the other way around drops it.
-//
-// Takes a body of the `application/json` content type.
-//
-// Corresponds with PATCH /v1/realms/{realm}/clients/{client} (the `PatchClient` operationId).
-func (c *Client) PatchClient(ctx context.Context, realm string, client string, body PatchClientJSONRequestBody, reqEditors ...RequestEditorFn) (*ClientResponse, error) {
-	req, err := NewPatchClientRequest(c.Server, realm, client, body)
-	if err != nil {
-		return nil, err
-	}
-	req = req.WithContext(ctx)
-	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
-		return nil, err
-	}
-	return transport.Execute[ClientResponse](c.Client, req, true, 200)
-}
-
 // UpdateClientWithBody Update a client
 //
 // A client's `client_id` is immutable, and everything left out of the
@@ -1825,7 +1624,7 @@ func (c *Client) PatchClient(ctx context.Context, realm string, client string, b
 //
 // Takes any type of body and a specified content type.
 //
-// Corresponds with PUT /v1/realms/{realm}/clients/{client} (the `UpdateClient` operationId).
+// Corresponds with PATCH /v1/realms/{realm}/clients/{client} (the `UpdateClient` operationId).
 func (c *Client) UpdateClientWithBody(ctx context.Context, realm string, client string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*ClientResponse, error) {
 	req, err := NewUpdateClientRequestWithBody(c.Server, realm, client, contentType, body)
 	if err != nil {
@@ -1846,7 +1645,7 @@ func (c *Client) UpdateClientWithBody(ctx context.Context, realm string, client 
 //
 // Takes a body of the `application/json` content type.
 //
-// Corresponds with PUT /v1/realms/{realm}/clients/{client} (the `UpdateClient` operationId).
+// Corresponds with PATCH /v1/realms/{realm}/clients/{client} (the `UpdateClient` operationId).
 func (c *Client) UpdateClient(ctx context.Context, realm string, client string, body UpdateClientJSONRequestBody, reqEditors ...RequestEditorFn) (*ClientResponse, error) {
 	req, err := NewUpdateClientRequest(c.Server, realm, client, body)
 	if err != nil {
@@ -1966,51 +1765,13 @@ func (c *Client) GetResource(ctx context.Context, realm string, resource string,
 	return transport.Execute[ResourceResponse](c.Client, req, true, 200)
 }
 
-// PatchResourceWithBody Update a protected resource
-//
-// Fields left out retain their values. The built-in API resources are protected.
-//
-// Takes any type of body and a specified content type.
-//
-// Corresponds with PATCH /v1/realms/{realm}/resources/{resource} (the `PatchResource` operationId).
-func (c *Client) PatchResourceWithBody(ctx context.Context, realm string, resource string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*ResourceResponse, error) {
-	req, err := NewPatchResourceRequestWithBody(c.Server, realm, resource, contentType, body)
-	if err != nil {
-		return nil, err
-	}
-	req = req.WithContext(ctx)
-	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
-		return nil, err
-	}
-	return transport.Execute[ResourceResponse](c.Client, req, true, 200)
-}
-
-// PatchResource Update a protected resource
-//
-// Fields left out retain their values. The built-in API resources are protected.
-//
-// Takes a body of the `application/json` content type.
-//
-// Corresponds with PATCH /v1/realms/{realm}/resources/{resource} (the `PatchResource` operationId).
-func (c *Client) PatchResource(ctx context.Context, realm string, resource string, body PatchResourceJSONRequestBody, reqEditors ...RequestEditorFn) (*ResourceResponse, error) {
-	req, err := NewPatchResourceRequest(c.Server, realm, resource, body)
-	if err != nil {
-		return nil, err
-	}
-	req = req.WithContext(ctx)
-	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
-		return nil, err
-	}
-	return transport.Execute[ResourceResponse](c.Client, req, true, 200)
-}
-
 // UpdateResourceWithBody Update a protected resource
 //
 // Fields left out retain their values. The built-in API resources are protected.
 //
 // Takes any type of body and a specified content type.
 //
-// Corresponds with PUT /v1/realms/{realm}/resources/{resource} (the `UpdateResource` operationId).
+// Corresponds with PATCH /v1/realms/{realm}/resources/{resource} (the `UpdateResource` operationId).
 func (c *Client) UpdateResourceWithBody(ctx context.Context, realm string, resource string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*ResourceResponse, error) {
 	req, err := NewUpdateResourceRequestWithBody(c.Server, realm, resource, contentType, body)
 	if err != nil {
@@ -2029,7 +1790,7 @@ func (c *Client) UpdateResourceWithBody(ctx context.Context, realm string, resou
 //
 // Takes a body of the `application/json` content type.
 //
-// Corresponds with PUT /v1/realms/{realm}/resources/{resource} (the `UpdateResource` operationId).
+// Corresponds with PATCH /v1/realms/{realm}/resources/{resource} (the `UpdateResource` operationId).
 func (c *Client) UpdateResource(ctx context.Context, realm string, resource string, body UpdateResourceJSONRequestBody, reqEditors ...RequestEditorFn) (*ResourceResponse, error) {
 	req, err := NewUpdateResourceRequest(c.Server, realm, resource, body)
 	if err != nil {
@@ -2109,35 +1870,7 @@ func (c *Client) GetSocialProvider(ctx context.Context, realm string, socialProv
 	return transport.Execute[SocialProviderResponse](c.Client, req, true, 200)
 }
 
-// PatchSocialProviderWithBody performs a PATCH /v1/realms/{realm}/social-providers/{social_provider} (the `PatchSocialProvider` operationId) request,
-// with any type of body and a specified content type.
-func (c *Client) PatchSocialProviderWithBody(ctx context.Context, realm string, socialProvider string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*SocialProviderResponse, error) {
-	req, err := NewPatchSocialProviderRequestWithBody(c.Server, realm, socialProvider, contentType, body)
-	if err != nil {
-		return nil, err
-	}
-	req = req.WithContext(ctx)
-	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
-		return nil, err
-	}
-	return transport.Execute[SocialProviderResponse](c.Client, req, true, 200)
-}
-
-// PatchSocialProvider performs a PATCH /v1/realms/{realm}/social-providers/{social_provider} (the `PatchSocialProvider` operationId) request.
-// Takes a body of the `application/json` content type.
-func (c *Client) PatchSocialProvider(ctx context.Context, realm string, socialProvider string, body PatchSocialProviderJSONRequestBody, reqEditors ...RequestEditorFn) (*SocialProviderResponse, error) {
-	req, err := NewPatchSocialProviderRequest(c.Server, realm, socialProvider, body)
-	if err != nil {
-		return nil, err
-	}
-	req = req.WithContext(ctx)
-	if err := c.applyEditors(ctx, req, reqEditors); err != nil {
-		return nil, err
-	}
-	return transport.Execute[SocialProviderResponse](c.Client, req, true, 200)
-}
-
-// UpdateSocialProviderWithBody performs a PUT /v1/realms/{realm}/social-providers/{social_provider} (the `UpdateSocialProvider` operationId) request,
+// UpdateSocialProviderWithBody performs a PATCH /v1/realms/{realm}/social-providers/{social_provider} (the `UpdateSocialProvider` operationId) request,
 // with any type of body and a specified content type.
 func (c *Client) UpdateSocialProviderWithBody(ctx context.Context, realm string, socialProvider string, contentType string, body io.Reader, reqEditors ...RequestEditorFn) (*SocialProviderResponse, error) {
 	req, err := NewUpdateSocialProviderRequestWithBody(c.Server, realm, socialProvider, contentType, body)
@@ -2151,7 +1884,7 @@ func (c *Client) UpdateSocialProviderWithBody(ctx context.Context, realm string,
 	return transport.Execute[SocialProviderResponse](c.Client, req, true, 200)
 }
 
-// UpdateSocialProvider performs a PUT /v1/realms/{realm}/social-providers/{social_provider} (the `UpdateSocialProvider` operationId) request.
+// UpdateSocialProvider performs a PATCH /v1/realms/{realm}/social-providers/{social_provider} (the `UpdateSocialProvider` operationId) request.
 // Takes a body of the `application/json` content type.
 func (c *Client) UpdateSocialProvider(ctx context.Context, realm string, socialProvider string, body UpdateSocialProviderJSONRequestBody, reqEditors ...RequestEditorFn) (*SocialProviderResponse, error) {
 	req, err := NewUpdateSocialProviderRequest(c.Server, realm, socialProvider, body)
@@ -2427,60 +2160,6 @@ func NewGetClientRequest(server string, realm string, client string) (*http.Requ
 	return req, nil
 }
 
-// NewPatchClientRequest calls the generic PatchClient builder with application/json body
-func NewPatchClientRequest(server string, realm string, client string, body PatchClientJSONRequestBody) (*http.Request, error) {
-	var bodyReader io.Reader
-	buf, err := json.Marshal(body)
-	if err != nil {
-		return nil, err
-	}
-	bodyReader = bytes.NewReader(buf)
-	return NewPatchClientRequestWithBody(server, realm, client, "application/json", bodyReader)
-}
-
-// NewPatchClientRequestWithBody constructs an http.Request for the PatchClient method, with any body, and a specified content type
-func NewPatchClientRequestWithBody(server string, realm string, client string, contentType string, body io.Reader) (*http.Request, error) {
-	var err error
-
-	var pathParam0 string
-
-	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "realm", realm, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "string", Format: ""})
-	if err != nil {
-		return nil, err
-	}
-
-	var pathParam1 string
-
-	pathParam1, err = runtime.StyleParamWithOptions("simple", false, "client", client, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "string", Format: ""})
-	if err != nil {
-		return nil, err
-	}
-
-	serverURL, err := url.Parse(server)
-	if err != nil {
-		return nil, err
-	}
-
-	operationPath := fmt.Sprintf("/v1/realms/%s/clients/%s", pathParam0, pathParam1)
-	if operationPath[0] == '/' {
-		operationPath = "." + operationPath
-	}
-
-	queryURL, err := serverURL.Parse(operationPath)
-	if err != nil {
-		return nil, err
-	}
-
-	req, err := http.NewRequest(http.MethodPatch, queryURL.String(), body)
-	if err != nil {
-		return nil, err
-	}
-
-	req.Header.Add("Content-Type", contentType)
-
-	return req, nil
-}
-
 // NewUpdateClientRequest calls the generic UpdateClient builder with application/json body
 func NewUpdateClientRequest(server string, realm string, client string, body UpdateClientJSONRequestBody) (*http.Request, error) {
 	var bodyReader io.Reader
@@ -2525,7 +2204,7 @@ func NewUpdateClientRequestWithBody(server string, realm string, client string, 
 		return nil, err
 	}
 
-	req, err := http.NewRequest(http.MethodPut, queryURL.String(), body)
+	req, err := http.NewRequest(http.MethodPatch, queryURL.String(), body)
 	if err != nil {
 		return nil, err
 	}
@@ -2855,60 +2534,6 @@ func NewGetResourceRequest(server string, realm string, resource string) (*http.
 	return req, nil
 }
 
-// NewPatchResourceRequest calls the generic PatchResource builder with application/json body
-func NewPatchResourceRequest(server string, realm string, resource string, body PatchResourceJSONRequestBody) (*http.Request, error) {
-	var bodyReader io.Reader
-	buf, err := json.Marshal(body)
-	if err != nil {
-		return nil, err
-	}
-	bodyReader = bytes.NewReader(buf)
-	return NewPatchResourceRequestWithBody(server, realm, resource, "application/json", bodyReader)
-}
-
-// NewPatchResourceRequestWithBody constructs an http.Request for the PatchResource method, with any body, and a specified content type
-func NewPatchResourceRequestWithBody(server string, realm string, resource string, contentType string, body io.Reader) (*http.Request, error) {
-	var err error
-
-	var pathParam0 string
-
-	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "realm", realm, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "string", Format: ""})
-	if err != nil {
-		return nil, err
-	}
-
-	var pathParam1 string
-
-	pathParam1, err = runtime.StyleParamWithOptions("simple", false, "resource", resource, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "string", Format: ""})
-	if err != nil {
-		return nil, err
-	}
-
-	serverURL, err := url.Parse(server)
-	if err != nil {
-		return nil, err
-	}
-
-	operationPath := fmt.Sprintf("/v1/realms/%s/resources/%s", pathParam0, pathParam1)
-	if operationPath[0] == '/' {
-		operationPath = "." + operationPath
-	}
-
-	queryURL, err := serverURL.Parse(operationPath)
-	if err != nil {
-		return nil, err
-	}
-
-	req, err := http.NewRequest(http.MethodPatch, queryURL.String(), body)
-	if err != nil {
-		return nil, err
-	}
-
-	req.Header.Add("Content-Type", contentType)
-
-	return req, nil
-}
-
 // NewUpdateResourceRequest calls the generic UpdateResource builder with application/json body
 func NewUpdateResourceRequest(server string, realm string, resource string, body UpdateResourceJSONRequestBody) (*http.Request, error) {
 	var bodyReader io.Reader
@@ -2953,7 +2578,7 @@ func NewUpdateResourceRequestWithBody(server string, realm string, resource stri
 		return nil, err
 	}
 
-	req, err := http.NewRequest(http.MethodPut, queryURL.String(), body)
+	req, err := http.NewRequest(http.MethodPatch, queryURL.String(), body)
 	if err != nil {
 		return nil, err
 	}
@@ -3213,60 +2838,6 @@ func NewGetSocialProviderRequest(server string, realm string, socialProvider str
 	return req, nil
 }
 
-// NewPatchSocialProviderRequest calls the generic PatchSocialProvider builder with application/json body
-func NewPatchSocialProviderRequest(server string, realm string, socialProvider string, body PatchSocialProviderJSONRequestBody) (*http.Request, error) {
-	var bodyReader io.Reader
-	buf, err := json.Marshal(body)
-	if err != nil {
-		return nil, err
-	}
-	bodyReader = bytes.NewReader(buf)
-	return NewPatchSocialProviderRequestWithBody(server, realm, socialProvider, "application/json", bodyReader)
-}
-
-// NewPatchSocialProviderRequestWithBody constructs an http.Request for the PatchSocialProvider method, with any body, and a specified content type
-func NewPatchSocialProviderRequestWithBody(server string, realm string, socialProvider string, contentType string, body io.Reader) (*http.Request, error) {
-	var err error
-
-	var pathParam0 string
-
-	pathParam0, err = runtime.StyleParamWithOptions("simple", false, "realm", realm, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "string", Format: ""})
-	if err != nil {
-		return nil, err
-	}
-
-	var pathParam1 string
-
-	pathParam1, err = runtime.StyleParamWithOptions("simple", false, "social_provider", socialProvider, runtime.StyleParamOptions{ParamLocation: runtime.ParamLocationPath, Type: "string", Format: ""})
-	if err != nil {
-		return nil, err
-	}
-
-	serverURL, err := url.Parse(server)
-	if err != nil {
-		return nil, err
-	}
-
-	operationPath := fmt.Sprintf("/v1/realms/%s/social-providers/%s", pathParam0, pathParam1)
-	if operationPath[0] == '/' {
-		operationPath = "." + operationPath
-	}
-
-	queryURL, err := serverURL.Parse(operationPath)
-	if err != nil {
-		return nil, err
-	}
-
-	req, err := http.NewRequest(http.MethodPatch, queryURL.String(), body)
-	if err != nil {
-		return nil, err
-	}
-
-	req.Header.Add("Content-Type", contentType)
-
-	return req, nil
-}
-
 // NewUpdateSocialProviderRequest calls the generic UpdateSocialProvider builder with application/json body
 func NewUpdateSocialProviderRequest(server string, realm string, socialProvider string, body UpdateSocialProviderJSONRequestBody) (*http.Request, error) {
 	var bodyReader io.Reader
@@ -3311,7 +2882,7 @@ func NewUpdateSocialProviderRequestWithBody(server string, realm string, socialP
 		return nil, err
 	}
 
-	req, err := http.NewRequest(http.MethodPut, queryURL.String(), body)
+	req, err := http.NewRequest(http.MethodPatch, queryURL.String(), body)
 	if err != nil {
 		return nil, err
 	}

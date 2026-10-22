@@ -24,7 +24,7 @@ func TestPatchPreservesOmittedNullAndZeroValues(t *testing.T) {
 		{"zero values", management.UpdateClientData{ConsentRequired: &consent, RedirectUris: &redirects}, `{"consent_required":false,"redirect_uris":[]}`},
 	} {
 		t.Run(test.name, func(t *testing.T) {
-			request, err := management.NewPatchClientRequest("https://lock.example/api/", "staging", "client-123", test.body)
+			request, err := management.NewUpdateClientRequest("https://lock.example/api/", "staging", "client-123", test.body)
 			if err != nil {
 				t.Fatal(err)
 			}
