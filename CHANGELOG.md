@@ -1,5 +1,16 @@
 # Changelog
 
+## [0.2.0](https://github.com/use-lock/client-go/compare/v0.1.0...v0.2.0) (2026-10-22)
+
+
+### ⚠ BREAKING CHANGES
+
+* the Patch* methods are removed; use the Update* methods, which now send PATCH with partial bodies.
+
+### Features
+
+* follow Lock's PATCH-only API and client revocation ([16db41b](https://github.com/use-lock/client-go/commit/16db41b0604d9aa24f99b29dcb782871e2240df5))
+
 ## 0.1.0 (2026-09-16)
 
 
