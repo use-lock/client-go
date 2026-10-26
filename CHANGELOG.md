@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.3.0](https://github.com/use-lock/client-go/compare/v0.2.0...v0.3.0) (2026-10-26)
+
+
+### Features
+
+* add allowed audiences to clients ([#7](https://github.com/use-lock/client-go/issues/7)) ([e8f6cb5](https://github.com/use-lock/client-go/commit/e8f6cb557a9220c514207c4071980ebcaa254a01))
+
 ## [0.2.0](https://github.com/use-lock/client-go/compare/v0.1.0...v0.2.0) (2026-10-22)
 
 
