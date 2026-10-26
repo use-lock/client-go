@@ -1121,6 +1121,12 @@ type ModelNotFoundException struct {
 	Message string `json:"message"`
 }
 
+// ThrottleRequestsException defines model for ThrottleRequestsException.
+type ThrottleRequestsException struct {
+	// Message Error overview.
+	Message string `json:"message"`
+}
+
 // ValidationException defines model for ValidationException.
 type ValidationException struct {
 	// Errors A detailed description of each field that failed validation.

@@ -2,8 +2,8 @@
     "openapi": "3.1.2",
     "info": {
         "title": "Lock API",
-        "version": "0.0.0",
-        "description": "OAuth and OpenID Connect endpoints, discovery metadata, and the APIs for managing this Lock instance. Protocol endpoints are served on each realm\u2019s own host.",
+        "version": "0.2.0",
+        "description": "OAuth and OpenID Connect endpoints, discovery metadata, and the APIs for managing this Lock instance. Protocol endpoints are served on each realm’s own host.",
         "license": {
             "name": "MIT",
             "identifier": "MIT"
@@ -34,7 +34,9 @@
                 "operationId": "v1.realms.index",
                 "description": "Every realm this instance serves, the administration realm included.",
                 "summary": "List realms",
-                "tags": ["Admin API"],
+                "tags": [
+                    "Admin API"
+                ],
                 "parameters": [
                     {
                         "name": "sort",
@@ -105,7 +107,12 @@
                             "type": "array",
                             "items": {
                                 "type": "string",
-                                "enum": ["pending", "verified", "unreachable", "misrouted"]
+                                "enum": [
+                                    "pending",
+                                    "verified",
+                                    "unreachable",
+                                    "misrouted"
+                                ]
                             }
                         },
                         "explode": false
@@ -150,7 +157,10 @@
                                                 "type": "object",
                                                 "properties": {
                                                     "url": {
-                                                        "type": ["string", "null"]
+                                                        "type": [
+                                                            "string",
+                                                            "null"
+                                                        ]
                                                     },
                                                     "label": {
                                                         "type": "string"
@@ -159,7 +169,11 @@
                                                         "type": "boolean"
                                                     }
                                                 },
-                                                "required": ["url", "label", "active"]
+                                                "required": [
+                                                    "url",
+                                                    "label",
+                                                    "active"
+                                                ]
                                             }
                                         },
                                         "meta": {
@@ -170,10 +184,16 @@
                                                     "minimum": 1
                                                 },
                                                 "first_page_url": {
-                                                    "type": ["string", "null"]
+                                                    "type": [
+                                                        "string",
+                                                        "null"
+                                                    ]
                                                 },
                                                 "from": {
-                                                    "type": ["integer", "null"],
+                                                    "type": [
+                                                        "integer",
+                                                        "null"
+                                                    ],
                                                     "minimum": 1
                                                 },
                                                 "last_page": {
@@ -181,23 +201,38 @@
                                                     "minimum": 1
                                                 },
                                                 "last_page_url": {
-                                                    "type": ["string", "null"]
+                                                    "type": [
+                                                        "string",
+                                                        "null"
+                                                    ]
                                                 },
                                                 "next_page_url": {
-                                                    "type": ["string", "null"]
+                                                    "type": [
+                                                        "string",
+                                                        "null"
+                                                    ]
                                                 },
                                                 "path": {
-                                                    "type": ["string", "null"]
+                                                    "type": [
+                                                        "string",
+                                                        "null"
+                                                    ]
                                                 },
                                                 "per_page": {
                                                     "type": "integer",
                                                     "minimum": 0
                                                 },
                                                 "prev_page_url": {
-                                                    "type": ["string", "null"]
+                                                    "type": [
+                                                        "string",
+                                                        "null"
+                                                    ]
                                                 },
                                                 "to": {
-                                                    "type": ["integer", "null"],
+                                                    "type": [
+                                                        "integer",
+                                                        "null"
+                                                    ],
                                                     "minimum": 1
                                                 },
                                                 "total": {
@@ -220,7 +255,25 @@
                                             ]
                                         }
                                     },
-                                    "required": ["data", "links", "meta"]
+                                    "required": [
+                                        "data",
+                                        "links",
+                                        "meta"
+                                    ]
+                                }
+                            }
+                        },
+                        "headers": {
+                            "X-RateLimit-Limit": {
+                                "description": "The maximum number of requests allowed in the current window.",
+                                "schema": {
+                                    "type": "integer"
+                                }
+                            },
+                            "X-RateLimit-Remaining": {
+                                "description": "The number of requests left in the current window.",
+                                "schema": {
+                                    "type": "integer"
                                 }
                             }
                         }
@@ -235,14 +288,19 @@
                                         "error": {
                                             "type": "string",
                                             "description": "The RFC 6749 error code.",
-                                            "enum": ["invalid_token"]
+                                            "enum": [
+                                                "invalid_token"
+                                            ]
                                         },
                                         "error_description": {
                                             "type": "string",
                                             "description": "A human readable explanation."
                                         }
                                     },
-                                    "required": ["error", "error_description"]
+                                    "required": [
+                                        "error",
+                                        "error_description"
+                                    ]
                                 }
                             }
                         }
@@ -257,34 +315,46 @@
                                         "error": {
                                             "type": "string",
                                             "description": "The RFC 6749 error code.",
-                                            "enum": ["insufficient_scope"]
+                                            "enum": [
+                                                "insufficient_scope"
+                                            ]
                                         },
                                         "error_description": {
                                             "type": "string",
                                             "description": "A human readable explanation."
                                         }
                                     },
-                                    "required": ["error", "error_description"]
+                                    "required": [
+                                        "error",
+                                        "error_description"
+                                    ]
                                 }
                             }
                         }
                     },
                     "422": {
                         "$ref": "#/components/responses/ValidationException"
+                    },
+                    "429": {
+                        "$ref": "#/components/responses/ThrottleRequestsException"
                     }
                 },
                 "security": [
                     {
-                        "adminOAuth2": ["realms:read"]
+                        "adminOAuth2": [
+                            "realms:read"
+                        ]
                     }
                 ],
                 "x-group": "admin"
             },
             "post": {
                 "operationId": "v1.realms.store",
-                "description": "The realm gets its own signing keypair, and its domain is checked right\naway. A domain that does not reach this instance yet is reported through\n`domain_status` rather than refused \u2014 DNS and the proxy usually follow.\nSettings left out of `settings` follow the instance defaults.",
+                "description": "The realm gets its own signing keypair, and its domain is checked right\naway. A domain that does not reach this instance yet is reported through\n`domain_status` rather than refused — DNS and the proxy usually follow.\nSettings left out of `settings` follow the instance defaults.",
                 "summary": "Create a realm",
-                "tags": ["Admin API"],
+                "tags": [
+                    "Admin API"
+                ],
                 "requestBody": {
                     "required": true,
                     "content": {
@@ -307,13 +377,26 @@
                                             "$ref": "#/components/schemas/RealmData"
                                         }
                                     },
-                                    "required": ["data"]
+                                    "required": [
+                                        "data"
+                                    ]
+                                }
+                            }
+                        },
+                        "headers": {
+                            "X-RateLimit-Limit": {
+                                "description": "The maximum number of requests allowed in the current window.",
+                                "schema": {
+                                    "type": "integer"
+                                }
+                            },
+                            "X-RateLimit-Remaining": {
+                                "description": "The number of requests left in the current window.",
+                                "schema": {
+                                    "type": "integer"
                                 }
                             }
                         }
-                    },
-                    "422": {
-                        "$ref": "#/components/responses/ValidationException"
                     },
                     "401": {
                         "description": "The access token is missing, expired, or not addressed to this API.",
@@ -325,14 +408,19 @@
                                         "error": {
                                             "type": "string",
                                             "description": "The RFC 6749 error code.",
-                                            "enum": ["invalid_token"]
+                                            "enum": [
+                                                "invalid_token"
+                                            ]
                                         },
                                         "error_description": {
                                             "type": "string",
                                             "description": "A human readable explanation."
                                         }
                                     },
-                                    "required": ["error", "error_description"]
+                                    "required": [
+                                        "error",
+                                        "error_description"
+                                    ]
                                 }
                             }
                         }
@@ -347,22 +435,35 @@
                                         "error": {
                                             "type": "string",
                                             "description": "The RFC 6749 error code.",
-                                            "enum": ["insufficient_scope"]
+                                            "enum": [
+                                                "insufficient_scope"
+                                            ]
                                         },
                                         "error_description": {
                                             "type": "string",
                                             "description": "A human readable explanation."
                                         }
                                     },
-                                    "required": ["error", "error_description"]
+                                    "required": [
+                                        "error",
+                                        "error_description"
+                                    ]
                                 }
                             }
                         }
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/ValidationException"
+                    },
+                    "429": {
+                        "$ref": "#/components/responses/ThrottleRequestsException"
                     }
                 },
                 "security": [
                     {
-                        "adminOAuth2": ["realms:write"]
+                        "adminOAuth2": [
+                            "realms:write"
+                        ]
                     }
                 ],
                 "x-group": "admin"
@@ -372,7 +473,9 @@
             "get": {
                 "operationId": "v1.realms.show",
                 "summary": "Show a realm",
-                "tags": ["Admin API"],
+                "tags": [
+                    "Admin API"
+                ],
                 "parameters": [
                     {
                         "name": "realm",
@@ -396,13 +499,26 @@
                                             "$ref": "#/components/schemas/RealmData"
                                         }
                                     },
-                                    "required": ["data"]
+                                    "required": [
+                                        "data"
+                                    ]
+                                }
+                            }
+                        },
+                        "headers": {
+                            "X-RateLimit-Limit": {
+                                "description": "The maximum number of requests allowed in the current window.",
+                                "schema": {
+                                    "type": "integer"
+                                }
+                            },
+                            "X-RateLimit-Remaining": {
+                                "description": "The number of requests left in the current window.",
+                                "schema": {
+                                    "type": "integer"
                                 }
                             }
                         }
-                    },
-                    "404": {
-                        "$ref": "#/components/responses/ModelNotFoundException"
                     },
                     "401": {
                         "description": "The access token is missing, expired, or not addressed to this API.",
@@ -414,14 +530,19 @@
                                         "error": {
                                             "type": "string",
                                             "description": "The RFC 6749 error code.",
-                                            "enum": ["invalid_token"]
+                                            "enum": [
+                                                "invalid_token"
+                                            ]
                                         },
                                         "error_description": {
                                             "type": "string",
                                             "description": "A human readable explanation."
                                         }
                                     },
-                                    "required": ["error", "error_description"]
+                                    "required": [
+                                        "error",
+                                        "error_description"
+                                    ]
                                 }
                             }
                         }
@@ -436,22 +557,35 @@
                                         "error": {
                                             "type": "string",
                                             "description": "The RFC 6749 error code.",
-                                            "enum": ["insufficient_scope"]
+                                            "enum": [
+                                                "insufficient_scope"
+                                            ]
                                         },
                                         "error_description": {
                                             "type": "string",
                                             "description": "A human readable explanation."
                                         }
                                     },
-                                    "required": ["error", "error_description"]
+                                    "required": [
+                                        "error",
+                                        "error_description"
+                                    ]
                                 }
                             }
                         }
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/ModelNotFoundException"
+                    },
+                    "429": {
+                        "$ref": "#/components/responses/ThrottleRequestsException"
                     }
                 },
                 "security": [
                     {
-                        "adminOAuth2": ["realms:read"]
+                        "adminOAuth2": [
+                            "realms:read"
+                        ]
                     }
                 ],
                 "x-group": "admin"
@@ -460,7 +594,9 @@
                 "operationId": "v1.realms.destroy",
                 "description": "Purges the realm's users, roles, clients, tokens and keys, and frees its\nslug. The administration realm cannot be deleted.",
                 "summary": "Delete a realm",
-                "tags": ["Admin API"],
+                "tags": [
+                    "Admin API"
+                ],
                 "parameters": [
                     {
                         "name": "realm",
@@ -474,7 +610,78 @@
                 ],
                 "responses": {
                     "204": {
-                        "description": "No content"
+                        "description": "No content",
+                        "headers": {
+                            "X-RateLimit-Limit": {
+                                "description": "The maximum number of requests allowed in the current window.",
+                                "schema": {
+                                    "type": "integer"
+                                }
+                            },
+                            "X-RateLimit-Remaining": {
+                                "description": "The number of requests left in the current window.",
+                                "schema": {
+                                    "type": "integer"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "The access token is missing, expired, or not addressed to this API.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "description": "The RFC 6749 error code.",
+                                            "enum": [
+                                                "invalid_token"
+                                            ]
+                                        },
+                                        "error_description": {
+                                            "type": "string",
+                                            "description": "A human readable explanation."
+                                        }
+                                    },
+                                    "required": [
+                                        "error",
+                                        "error_description"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "403": {
+                        "description": "The access token does not grant realms:write.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "error": {
+                                            "type": "string",
+                                            "description": "The RFC 6749 error code.",
+                                            "enum": [
+                                                "insufficient_scope"
+                                            ]
+                                        },
+                                        "error_description": {
+                                            "type": "string",
+                                            "description": "A human readable explanation."
+                                        }
+                                    },
+                                    "required": [
+                                        "error",
+                                        "error_description"
+                                    ]
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/ModelNotFoundException"
                     },
                     "409": {
                         "description": "An error",
@@ -491,62 +698,22 @@
                                             ]
                                         }
                                     },
-                                    "required": ["message"]
+                                    "required": [
+                                        "message"
+                                    ]
                                 }
                             }
                         }
                     },
-                    "404": {
-                        "$ref": "#/components/responses/ModelNotFoundException"
-                    },
-                    "401": {
-                        "description": "The access token is missing, expired, or not addressed to this API.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "error": {
-                                            "type": "string",
-                                            "description": "The RFC 6749 error code.",
-                                            "enum": ["invalid_token"]
-                                        },
-                                        "error_description": {
-                                            "type": "string",
-                                            "description": "A human readable explanation."
-                                        }
-                                    },
-                                    "required": ["error", "error_description"]
-                                }
-                            }
-                        }
-                    },
-                    "403": {
-                        "description": "The access token does not grant realms:write.",
-                        "content": {
-                            "application/json": {
-                                "schema": {
-                                    "type": "object",
-                                    "properties": {
-                                        "error": {
-                                            "type": "string",
-                                            "description": "The RFC 6749 error code.",
-                                            "enum": ["insufficient_scope"]
-                                        },
-                                        "error_description": {
-                                            "type": "string",
-                                            "description": "A human readable explanation."
-                                        }
-                                    },
-                                    "required": ["error", "error_description"]
-                                }
-                            }
-                        }
+                    "429": {
+                        "$ref": "#/components/responses/ThrottleRequestsException"
                     }
                 },
                 "security": [
                     {
-                        "adminOAuth2": ["realms:write"]
+                        "adminOAuth2": [
+                            "realms:write"
+                        ]
                     }
                 ],
                 "x-group": "admin"
@@ -555,7 +722,9 @@
                 "operationId": "v1.realms.update",
                 "description": "A realm's slug is immutable. Settings left out of `settings` keep\ntheir current value. Re-pointing the domain changes the issuer of every\ntoken the realm mints and restarts the domain check.",
                 "summary": "Update a realm",
-                "tags": ["Admin API"],
+                "tags": [
+                    "Admin API"
+                ],
                 "parameters": [
                     {
                         "name": "realm",
@@ -588,16 +757,26 @@
                                             "$ref": "#/components/schemas/RealmData"
                                         }
                                     },
-                                    "required": ["data"]
+                                    "required": [
+                                        "data"
+                                    ]
+                                }
+                            }
+                        },
+                        "headers": {
+                            "X-RateLimit-Limit": {
+                                "description": "The maximum number of requests allowed in the current window.",
+                                "schema": {
+                                    "type": "integer"
+                                }
+                            },
+                            "X-RateLimit-Remaining": {
+                                "description": "The number of requests left in the current window.",
+                                "schema": {
+                                    "type": "integer"
                                 }
                             }
                         }
-                    },
-                    "404": {
-                        "$ref": "#/components/responses/ModelNotFoundException"
-                    },
-                    "422": {
-                        "$ref": "#/components/responses/ValidationException"
                     },
                     "401": {
                         "description": "The access token is missing, expired, or not addressed to this API.",
@@ -609,14 +788,19 @@
                                         "error": {
                                             "type": "string",
                                             "description": "The RFC 6749 error code.",
-                                            "enum": ["invalid_token"]
+                                            "enum": [
+                                                "invalid_token"
+                                            ]
                                         },
                                         "error_description": {
                                             "type": "string",
                                             "description": "A human readable explanation."
                                         }
                                     },
-                                    "required": ["error", "error_description"]
+                                    "required": [
+                                        "error",
+                                        "error_description"
+                                    ]
                                 }
                             }
                         }
@@ -631,22 +815,38 @@
                                         "error": {
                                             "type": "string",
                                             "description": "The RFC 6749 error code.",
-                                            "enum": ["insufficient_scope"]
+                                            "enum": [
+                                                "insufficient_scope"
+                                            ]
                                         },
                                         "error_description": {
                                             "type": "string",
                                             "description": "A human readable explanation."
                                         }
                                     },
-                                    "required": ["error", "error_description"]
+                                    "required": [
+                                        "error",
+                                        "error_description"
+                                    ]
                                 }
                             }
                         }
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/ModelNotFoundException"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/ValidationException"
+                    },
+                    "429": {
+                        "$ref": "#/components/responses/ThrottleRequestsException"
                     }
                 },
                 "security": [
                     {
-                        "adminOAuth2": ["realms:write"]
+                        "adminOAuth2": [
+                            "realms:write"
+                        ]
                     }
                 ],
                 "x-group": "admin"
@@ -732,7 +932,11 @@
             "AuthorizationCodeRequest": {
                 "type": "object",
                 "title": "Authorization code",
-                "required": ["grant_type", "code", "code_verifier"],
+                "required": [
+                    "grant_type",
+                    "code",
+                    "code_verifier"
+                ],
                 "properties": {
                     "client_id": {
                         "type": "string",
@@ -764,7 +968,9 @@
                     },
                     "grant_type": {
                         "type": "string",
-                        "enum": ["authorization_code"]
+                        "enum": [
+                            "authorization_code"
+                        ]
                     },
                     "code": {
                         "type": "string"
@@ -785,7 +991,9 @@
             "ClientCredentialsRequest": {
                 "type": "object",
                 "title": "Client credentials",
-                "required": ["grant_type"],
+                "required": [
+                    "grant_type"
+                ],
                 "properties": {
                     "client_id": {
                         "type": "string",
@@ -817,7 +1025,9 @@
                     },
                     "grant_type": {
                         "type": "string",
-                        "enum": ["client_credentials"]
+                        "enum": [
+                            "client_credentials"
+                        ]
                     }
                 }
             },
@@ -873,12 +1083,15 @@
                         "description": "Whether the identity is asked to consent before the client is granted its scopes."
                     },
                     "backchannel_logout_uri": {
-                        "type": ["string", "null"],
+                        "type": [
+                            "string",
+                            "null"
+                        ],
                         "description": "Where a back-channel logout token is delivered."
                     },
                     "scopes": {
                         "type": "array",
-                        "description": "The scopes the client is granted, from the realm\u2019s client policy.",
+                        "description": "The scopes the client is granted, from the realm’s client policy.",
                         "items": {
                             "type": "string"
                         },
@@ -897,15 +1110,24 @@
                         "description": "Whether the client is blocked from obtaining tokens."
                     },
                     "revoked_at": {
-                        "type": ["string", "null"],
+                        "type": [
+                            "string",
+                            "null"
+                        ],
                         "description": "When the client was blocked, if it is."
                     },
                     "created_at": {
-                        "type": ["string", "null"],
+                        "type": [
+                            "string",
+                            "null"
+                        ],
                         "description": "When the client was created."
                     },
                     "updated_at": {
-                        "type": ["string", "null"],
+                        "type": [
+                            "string",
+                            "null"
+                        ],
                         "description": "When the client was last changed."
                     }
                 },
@@ -933,11 +1155,16 @@
                         "description": "The identifier a relying party authenticates with."
                     },
                     "secret": {
-                        "type": ["string", "null"],
+                        "type": [
+                            "string",
+                            "null"
+                        ],
                         "description": "The credential disclosed by this explicit write-scoped operation; null for a public client."
                     }
                 },
-                "required": ["client_id"],
+                "required": [
+                    "client_id"
+                ],
                 "title": "ClientSecretData"
             },
             "CreateClientData": {
@@ -957,7 +1184,11 @@
                         "description": "The grants the client may use.",
                         "items": {
                             "type": "string",
-                            "enum": ["authorization_code", "refresh_token", "client_credentials"]
+                            "enum": [
+                                "authorization_code",
+                                "refresh_token",
+                                "client_credentials"
+                            ]
                         },
                         "minItems": 1
                     },
@@ -982,7 +1213,10 @@
                         "description": "Whether the identity is asked to consent before the client is granted its scopes."
                     },
                     "backchannel_logout_uri": {
-                        "type": ["string", "null"],
+                        "type": [
+                            "string",
+                            "null"
+                        ],
                         "format": "uri",
                         "description": "Where a back-channel logout token is delivered.",
                         "maxLength": 2048
@@ -993,14 +1227,18 @@
                     },
                     "allowed_audiences": {
                         "type": "array",
-                        "description": "The RFC 8707 resources the client may request tokens for, each spelled exactly as the client sends it in `resource` and as it appears in the token's `aud`: the realm's issuer, or a registered resource's identifier resolved against it \u2014 a path-relative identifier such as `/docpipe` becomes the issuer with that path appended, an absolute one stays as it is.",
+                        "description": "The RFC 8707 resources the client may request tokens for, each spelled exactly as the client sends it in `resource` and as it appears in the token's `aud`: the realm's issuer, or a registered resource's identifier resolved against it — a path-relative identifier such as `/docpipe` becomes the issuer with that path appended, an absolute one stays as it is.",
                         "items": {
                             "type": "string"
                         },
                         "maxItems": 100
                     }
                 },
-                "required": ["name", "token_endpoint_auth_method", "grant_types"],
+                "required": [
+                    "name",
+                    "token_endpoint_auth_method",
+                    "grant_types"
+                ],
                 "title": "CreateClientData"
             },
             "CreateRealmData": {
@@ -1008,7 +1246,7 @@
                 "properties": {
                     "name": {
                         "type": "string",
-                        "description": "Human readable name shown to the realm\u2019s users.",
+                        "description": "Human readable name shown to the realm’s users.",
                         "maxLength": 255
                     },
                     "slug": {
@@ -1024,11 +1262,15 @@
                         "maxLength": 253
                     },
                     "settings": {
-                        "description": "The realm\u2019s policy. Settings left out follow the instance defaults.",
+                        "description": "The realm’s policy. Settings left out follow the instance defaults.",
                         "$ref": "#/components/schemas/RealmSettingsPatch"
                     }
                 },
-                "required": ["name", "slug", "domain"],
+                "required": [
+                    "name",
+                    "slug",
+                    "domain"
+                ],
                 "title": "CreateRealmData"
             },
             "CreateResourceData": {
@@ -1052,7 +1294,10 @@
                         }
                     }
                 },
-                "required": ["identifier", "name"],
+                "required": [
+                    "identifier",
+                    "name"
+                ],
                 "title": "CreateResourceData"
             },
             "CreateResourceScopeData": {
@@ -1065,12 +1310,17 @@
                         "maxLength": 255
                     },
                     "description": {
-                        "type": ["string", "null"],
+                        "type": [
+                            "string",
+                            "null"
+                        ],
                         "description": "Human readable description of the scope. Null clears the description.",
                         "maxLength": 255
                     }
                 },
-                "required": ["value"],
+                "required": [
+                    "value"
+                ],
                 "title": "CreateResourceScopeData"
             },
             "CreateSocialProviderData": {
@@ -1095,7 +1345,12 @@
                         "description": "Whether the realm accepts sign-ins through this provider."
                     }
                 },
-                "required": ["key", "driver", "config", "enabled"],
+                "required": [
+                    "key",
+                    "driver",
+                    "config",
+                    "enabled"
+                ],
                 "title": "CreateSocialProviderData"
             },
             "CreatedClientData": {
@@ -1110,7 +1365,10 @@
                         "$ref": "#/components/schemas/ClientSecretData"
                     }
                 },
-                "required": ["client", "credentials"],
+                "required": [
+                    "client",
+                    "credentials"
+                ],
                 "title": "CreatedClientData"
             },
             "OAuthAuthorizationRequest": {
@@ -1127,7 +1385,9 @@
                     },
                     "response_type": {
                         "type": "string",
-                        "enum": ["code"]
+                        "enum": [
+                            "code"
+                        ]
                     },
                     "redirect_uri": {
                         "type": "string",
@@ -1164,7 +1424,9 @@
                     },
                     "code_challenge_method": {
                         "type": "string",
-                        "enum": ["S256"]
+                        "enum": [
+                            "S256"
+                        ]
                     },
                     "nonce": {
                         "type": "string",
@@ -1188,7 +1450,9 @@
                     },
                     "response_mode": {
                         "type": "string",
-                        "enum": ["query"]
+                        "enum": [
+                            "query"
+                        ]
                     },
                     "_token": {
                         "type": "string",
@@ -1198,7 +1462,9 @@
             },
             "OAuthClientRegistration": {
                 "type": "object",
-                "required": ["redirect_uris"],
+                "required": [
+                    "redirect_uris"
+                ],
                 "properties": {
                     "redirect_uris": {
                         "type": "array",
@@ -1222,22 +1488,36 @@
                         "type": "array",
                         "items": {
                             "type": "string",
-                            "enum": ["authorization_code", "refresh_token"]
+                            "enum": [
+                                "authorization_code",
+                                "refresh_token"
+                            ]
                         },
-                        "default": ["authorization_code", "refresh_token"],
+                        "default": [
+                            "authorization_code",
+                            "refresh_token"
+                        ],
                         "description": "Must include authorization_code."
                     },
                     "response_types": {
                         "type": "array",
                         "items": {
                             "type": "string",
-                            "enum": ["code"]
+                            "enum": [
+                                "code"
+                            ]
                         },
-                        "default": ["code"]
+                        "default": [
+                            "code"
+                        ]
                     },
                     "token_endpoint_auth_method": {
                         "type": "string",
-                        "enum": ["none", "client_secret_basic", "client_secret_post"],
+                        "enum": [
+                            "none",
+                            "client_secret_basic",
+                            "client_secret_post"
+                        ],
                         "default": "none"
                     },
                     "backchannel_logout_uri": {
@@ -1252,7 +1532,9 @@
             },
             "OAuthConsentRequest": {
                 "type": "object",
-                "required": ["auth_token"],
+                "required": [
+                    "auth_token"
+                ],
                 "properties": {
                     "auth_token": {
                         "type": "string",
@@ -1266,7 +1548,10 @@
             },
             "OAuthError": {
                 "type": "object",
-                "required": ["error", "error_description"],
+                "required": [
+                    "error",
+                    "error_description"
+                ],
                 "properties": {
                     "error": {
                         "type": "string"
@@ -1278,14 +1563,18 @@
             },
             "OAuthIntrospection": {
                 "type": "object",
-                "required": ["active"],
+                "required": [
+                    "active"
+                ],
                 "properties": {
                     "active": {
                         "type": "boolean"
                     },
                     "token_type": {
                         "type": "string",
-                        "enum": ["Bearer"]
+                        "enum": [
+                            "Bearer"
+                        ]
                     },
                     "scope": {
                         "type": "string"
@@ -1361,7 +1650,9 @@
             },
             "OAuthPresentedToken": {
                 "type": "object",
-                "required": ["token"],
+                "required": [
+                    "token"
+                ],
                 "properties": {
                     "client_id": {
                         "type": "string",
@@ -1410,7 +1701,9 @@
                         "type": "array",
                         "items": {
                             "type": "string",
-                            "enum": ["header"]
+                            "enum": [
+                                "header"
+                            ]
                         }
                     }
                 }
@@ -1450,22 +1743,36 @@
                         "type": "array",
                         "items": {
                             "type": "string",
-                            "enum": ["authorization_code", "refresh_token"]
+                            "enum": [
+                                "authorization_code",
+                                "refresh_token"
+                            ]
                         },
-                        "default": ["authorization_code", "refresh_token"],
+                        "default": [
+                            "authorization_code",
+                            "refresh_token"
+                        ],
                         "description": "Must include authorization_code."
                     },
                     "response_types": {
                         "type": "array",
                         "items": {
                             "type": "string",
-                            "enum": ["code"]
+                            "enum": [
+                                "code"
+                            ]
                         },
-                        "default": ["code"]
+                        "default": [
+                            "code"
+                        ]
                     },
                     "token_endpoint_auth_method": {
                         "type": "string",
-                        "enum": ["none", "client_secret_basic", "client_secret_post"],
+                        "enum": [
+                            "none",
+                            "client_secret_basic",
+                            "client_secret_post"
+                        ],
                         "default": "none"
                     },
                     "backchannel_logout_uri": {
@@ -1488,7 +1795,9 @@
                     },
                     "client_secret_expires_at": {
                         "type": "integer",
-                        "enum": [0],
+                        "enum": [
+                            0
+                        ],
                         "description": "Returned with a client secret; zero means it does not expire."
                     },
                     "scope": {
@@ -1525,14 +1834,20 @@
             },
             "OAuthTokenResponse": {
                 "type": "object",
-                "required": ["access_token", "token_type", "expires_in"],
+                "required": [
+                    "access_token",
+                    "token_type",
+                    "expires_in"
+                ],
                 "properties": {
                     "access_token": {
                         "type": "string"
                     },
                     "token_type": {
                         "type": "string",
-                        "enum": ["Bearer"]
+                        "enum": [
+                            "Bearer"
+                        ]
                     },
                     "expires_in": {
                         "type": "integer",
@@ -1552,7 +1867,9 @@
                     },
                     "issued_token_type": {
                         "type": "string",
-                        "enum": ["urn:ietf:params:oauth:token-type:access_token"],
+                        "enum": [
+                            "urn:ietf:params:oauth:token-type:access_token"
+                        ],
                         "description": "Present for token exchange."
                     }
                 },
@@ -1560,28 +1877,43 @@
             },
             "OidcJwks": {
                 "type": "object",
-                "required": ["keys"],
+                "required": [
+                    "keys"
+                ],
                 "properties": {
                     "keys": {
                         "type": "array",
                         "items": {
                             "type": "object",
-                            "required": ["kty", "use", "kid", "alg", "n", "e"],
+                            "required": [
+                                "kty",
+                                "use",
+                                "kid",
+                                "alg",
+                                "n",
+                                "e"
+                            ],
                             "properties": {
                                 "kty": {
                                     "type": "string",
-                                    "enum": ["RSA"]
+                                    "enum": [
+                                        "RSA"
+                                    ]
                                 },
                                 "use": {
                                     "type": "string",
-                                    "enum": ["sig"]
+                                    "enum": [
+                                        "sig"
+                                    ]
                                 },
                                 "kid": {
                                     "type": "string"
                                 },
                                 "alg": {
                                     "type": "string",
-                                    "enum": ["RS256"]
+                                    "enum": [
+                                        "RS256"
+                                    ]
                                 },
                                 "n": {
                                     "type": "string",
@@ -1687,15 +2019,21 @@
                     },
                     "claims_parameter_supported": {
                         "type": "boolean",
-                        "enum": [false]
+                        "enum": [
+                            false
+                        ]
                     },
                     "request_parameter_supported": {
                         "type": "boolean",
-                        "enum": [false]
+                        "enum": [
+                            false
+                        ]
                     },
                     "request_uri_parameter_supported": {
                         "type": "boolean",
-                        "enum": [false]
+                        "enum": [
+                            false
+                        ]
                     },
                     "code_challenge_methods_supported": {
                         "type": "array",
@@ -1705,15 +2043,21 @@
                     },
                     "authorization_response_iss_parameter_supported": {
                         "type": "boolean",
-                        "enum": [true]
+                        "enum": [
+                            true
+                        ]
                     },
                     "backchannel_logout_supported": {
                         "type": "boolean",
-                        "enum": [true]
+                        "enum": [
+                            true
+                        ]
                     },
                     "backchannel_logout_session_supported": {
                         "type": "boolean",
-                        "enum": [true]
+                        "enum": [
+                            true
+                        ]
                     },
                     "token_endpoint_auth_methods_supported": {
                         "type": "array",
@@ -1757,7 +2101,9 @@
             },
             "OidcUserinfo": {
                 "type": "object",
-                "required": ["sub"],
+                "required": [
+                    "sub"
+                ],
                 "properties": {
                     "sub": {
                         "type": "string",
@@ -1807,10 +2153,13 @@
                     },
                     "issuer": {
                         "type": "string",
-                        "description": "The realm\u2019s OIDC issuer, the `iss` of every token it mints."
+                        "description": "The realm’s OIDC issuer, the `iss` of every token it mints."
                     },
                     "domain": {
-                        "type": ["string", "null"],
+                        "type": [
+                            "string",
+                            "null"
+                        ],
                         "description": "The configured domain; null for the master realm, which follows APP_URL."
                     },
                     "domain_status": {
@@ -1818,11 +2167,17 @@
                         "$ref": "#/components/schemas/RealmDomainStatus"
                     },
                     "domain_checked_at": {
-                        "type": ["string", "null"],
+                        "type": [
+                            "string",
+                            "null"
+                        ],
                         "description": "When the domain was last checked."
                     },
                     "domain_check_error": {
-                        "type": ["string", "null"],
+                        "type": [
+                            "string",
+                            "null"
+                        ],
                         "description": "Why the last domain check failed, when it did."
                     },
                     "master": {
@@ -1830,15 +2185,21 @@
                         "description": "Whether this is the administration realm, which cannot be deleted or re-pointed."
                     },
                     "settings": {
-                        "description": "The realm\u2019s own policy.",
+                        "description": "The realm’s own policy.",
                         "$ref": "#/components/schemas/RealmSettings"
                     },
                     "created_at": {
-                        "type": ["string", "null"],
+                        "type": [
+                            "string",
+                            "null"
+                        ],
                         "description": "When the realm was created."
                     },
                     "updated_at": {
-                        "type": ["string", "null"],
+                        "type": [
+                            "string",
+                            "null"
+                        ],
                         "description": "When the realm was last changed."
                     }
                 },
@@ -1856,7 +2217,12 @@
             "RealmDomainStatus": {
                 "type": "string",
                 "description": "What the last domain check found. `Unreachable` means no HTTP answer at all (DNS, connection, TLS); `Misrouted` means something answered, but not this Lock instance.\n",
-                "enum": ["pending", "verified", "unreachable", "misrouted"],
+                "enum": [
+                    "pending",
+                    "verified",
+                    "unreachable",
+                    "misrouted"
+                ],
                 "title": "RealmDomainStatus"
             },
             "RealmSettings": {
@@ -2204,7 +2570,10 @@
             "RefreshTokenRequest": {
                 "type": "object",
                 "title": "Refresh token",
-                "required": ["grant_type", "refresh_token"],
+                "required": [
+                    "grant_type",
+                    "refresh_token"
+                ],
                 "properties": {
                     "client_id": {
                         "type": "string",
@@ -2236,7 +2605,9 @@
                     },
                     "grant_type": {
                         "type": "string",
-                        "enum": ["refresh_token"]
+                        "enum": [
+                            "refresh_token"
+                        ]
                     },
                     "refresh_token": {
                         "type": "string"
@@ -2248,7 +2619,7 @@
                 "properties": {
                     "id": {
                         "type": "string",
-                        "description": "The UUID of the protected resource, used in this API\u2019s paths."
+                        "description": "The UUID of the protected resource, used in this API’s paths."
                     },
                     "realm": {
                         "type": "string",
@@ -2263,11 +2634,17 @@
                         "description": "Human readable name of the protected resource."
                     },
                     "created_at": {
-                        "type": ["string", "null"],
+                        "type": [
+                            "string",
+                            "null"
+                        ],
                         "description": "When the resource was created."
                     },
                     "updated_at": {
-                        "type": ["string", "null"],
+                        "type": [
+                            "string",
+                            "null"
+                        ],
                         "description": "When the resource was last changed."
                     },
                     "scopes": {
@@ -2278,7 +2655,13 @@
                         }
                     }
                 },
-                "required": ["id", "realm", "identifier", "name", "scopes"],
+                "required": [
+                    "id",
+                    "realm",
+                    "identifier",
+                    "name",
+                    "scopes"
+                ],
                 "title": "ResourceData"
             },
             "ResourceScopeChangeData": {
@@ -2291,7 +2674,10 @@
                         "maxLength": 255
                     },
                     "description": {
-                        "type": ["string", "null"],
+                        "type": [
+                            "string",
+                            "null"
+                        ],
                         "description": "Human readable description. Omit to keep the current description; null clears it.",
                         "maxLength": 255
                     },
@@ -2300,7 +2686,9 @@
                         "description": "Set to true to delete the scope named by value."
                     }
                 },
-                "required": ["value"],
+                "required": [
+                    "value"
+                ],
                 "title": "ResourceScopeChangeData"
             },
             "ResourceScopeData": {
@@ -2311,19 +2699,30 @@
                         "description": "Scope value, unique within its resource."
                     },
                     "description": {
-                        "type": ["string", "null"],
+                        "type": [
+                            "string",
+                            "null"
+                        ],
                         "description": "Human readable description of the scope."
                     },
                     "created_at": {
-                        "type": ["string", "null"],
+                        "type": [
+                            "string",
+                            "null"
+                        ],
                         "description": "When the scope was created."
                     },
                     "updated_at": {
-                        "type": ["string", "null"],
+                        "type": [
+                            "string",
+                            "null"
+                        ],
                         "description": "When the scope was last changed."
                     }
                 },
-                "required": ["value"],
+                "required": [
+                    "value"
+                ],
                 "title": "ResourceScopeData"
             },
             "SocialProviderCredentialsData": {
@@ -2335,7 +2734,10 @@
                         "maxLength": 255
                     },
                     "client_secret": {
-                        "type": ["string", "null"],
+                        "type": [
+                            "string",
+                            "null"
+                        ],
                         "description": "Write-only secret for Google, GitHub and OIDC. Required on creation; blank or null keeps the stored secret on update.",
                         "maxLength": 1000
                     },
@@ -2355,7 +2757,10 @@
                         "maxLength": 255
                     },
                     "private_key": {
-                        "type": ["string", "null"],
+                        "type": [
+                            "string",
+                            "null"
+                        ],
                         "description": "Write-only private key for Apple. Required on creation; blank or null keeps the stored key on update.",
                         "maxLength": 8000
                     }
@@ -2394,21 +2799,40 @@
                         "description": "Callback URL to register with the upstream provider."
                     },
                     "created_at": {
-                        "type": ["string", "null"],
+                        "type": [
+                            "string",
+                            "null"
+                        ],
                         "description": "When the provider was created."
                     },
                     "updated_at": {
-                        "type": ["string", "null"],
+                        "type": [
+                            "string",
+                            "null"
+                        ],
                         "description": "When the provider was last changed."
                     }
                 },
-                "required": ["id", "realm", "key", "driver", "enabled", "config", "callback_url"],
+                "required": [
+                    "id",
+                    "realm",
+                    "key",
+                    "driver",
+                    "enabled",
+                    "config",
+                    "callback_url"
+                ],
                 "title": "SocialProviderData"
             },
             "SocialProviderDriver": {
                 "type": "string",
                 "description": "The brokering drivers use-lock/server's SocialProviderRegistry ships. Each one needs a different set of credentials, which is why the stored config is a map rather than columns.\n",
-                "enum": ["google", "apple", "github", "oidc"],
+                "enum": [
+                    "google",
+                    "apple",
+                    "github",
+                    "oidc"
+                ],
                 "title": "SocialProviderDriver"
             },
             "SocialProviderPublicConfigData": {
@@ -2431,25 +2855,39 @@
                         "description": "Key ID for Apple providers."
                     }
                 },
-                "required": ["client_id"],
+                "required": [
+                    "client_id"
+                ],
                 "title": "SocialProviderPublicConfigData"
             },
             "TokenEndpointAuthMethod": {
                 "type": "string",
-                "description": "RFC 7591 \u00a72 / OIDC Registration \u00a72: how a client authenticates at the token, introspection and revocation endpoints. Enforced exactly: a client registered for one method is refused when it presents another.\n",
-                "enum": ["client_secret_basic", "client_secret_post", "none"],
+                "description": "RFC 7591 §2 / OIDC Registration §2: how a client authenticates at the token, introspection and revocation endpoints. Enforced exactly: a client registered for one method is refused when it presents another.\n",
+                "enum": [
+                    "client_secret_basic",
+                    "client_secret_post",
+                    "none"
+                ],
                 "title": "TokenEndpointAuthMethod"
             },
             "TokenExchangeRequest": {
                 "type": "object",
                 "title": "Token exchange",
-                "required": ["grant_type", "subject_token", "subject_token_type"],
+                "required": [
+                    "grant_type",
+                    "subject_token",
+                    "subject_token_type"
+                ],
                 "anyOf": [
                     {
-                        "required": ["audience"]
+                        "required": [
+                            "audience"
+                        ]
                     },
                     {
-                        "required": ["resource"]
+                        "required": [
+                            "resource"
+                        ]
                     }
                 ],
                 "properties": {
@@ -2472,18 +2910,24 @@
                     },
                     "grant_type": {
                         "type": "string",
-                        "enum": ["urn:ietf:params:oauth:grant-type:token-exchange"]
+                        "enum": [
+                            "urn:ietf:params:oauth:grant-type:token-exchange"
+                        ]
                     },
                     "subject_token": {
                         "type": "string"
                     },
                     "subject_token_type": {
                         "type": "string",
-                        "enum": ["urn:ietf:params:oauth:token-type:access_token"]
+                        "enum": [
+                            "urn:ietf:params:oauth:token-type:access_token"
+                        ]
                     },
                     "requested_token_type": {
                         "type": "string",
-                        "enum": ["urn:ietf:params:oauth:token-type:access_token"]
+                        "enum": [
+                            "urn:ietf:params:oauth:token-type:access_token"
+                        ]
                     },
                     "audience": {
                         "type": "string",
@@ -2509,7 +2953,11 @@
                         "description": "The grants the client may use. Replaces the current set.",
                         "items": {
                             "type": "string",
-                            "enum": ["authorization_code", "refresh_token", "client_credentials"]
+                            "enum": [
+                                "authorization_code",
+                                "refresh_token",
+                                "client_credentials"
+                            ]
                         },
                         "minItems": 1
                     },
@@ -2534,7 +2982,10 @@
                         "description": "Whether the identity is asked to consent before the client is granted its scopes."
                     },
                     "backchannel_logout_uri": {
-                        "type": ["string", "null"],
+                        "type": [
+                            "string",
+                            "null"
+                        ],
                         "format": "uri",
                         "description": "Where a back-channel logout token is delivered; `null` clears it.",
                         "maxLength": 2048
@@ -2559,7 +3010,7 @@
                 "properties": {
                     "name": {
                         "type": "string",
-                        "description": "Human readable name shown to the realm\u2019s users.",
+                        "description": "Human readable name shown to the realm’s users.",
                         "maxLength": 255
                     },
                     "domain": {
@@ -2569,7 +3020,7 @@
                         "maxLength": 253
                     },
                     "settings": {
-                        "description": "Any subset of the realm\u2019s policy; settings left out keep their current value.",
+                        "description": "Any subset of the realm’s policy; settings left out keep their current value.",
                         "$ref": "#/components/schemas/RealmSettingsPatch"
                     }
                 },
@@ -2614,6 +3065,51 @@
             }
         },
         "responses": {
+            "ThrottleRequestsException": {
+                "description": "Rate limit exceeded",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "message": {
+                                    "type": "string",
+                                    "description": "Error overview."
+                                }
+                            },
+                            "required": [
+                                "message"
+                            ]
+                        }
+                    }
+                },
+                "headers": {
+                    "X-RateLimit-Limit": {
+                        "description": "The maximum number of requests allowed in the current window.",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    "X-RateLimit-Remaining": {
+                        "description": "The number of requests left in the current window.",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    "Retry-After": {
+                        "description": "Seconds to wait before sending another request.",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    "X-RateLimit-Reset": {
+                        "description": "Seconds until the current window resets.",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                }
+            },
             "ValidationException": {
                 "description": "Validation error",
                 "content": {
@@ -2636,7 +3132,10 @@
                                     }
                                 }
                             },
-                            "required": ["message", "errors"]
+                            "required": [
+                                "message",
+                                "errors"
+                            ]
                         }
                     }
                 }
@@ -2653,7 +3152,9 @@
                                     "description": "Error overview."
                                 }
                             },
-                            "required": ["message"]
+                            "required": [
+                                "message"
+                            ]
                         }
                     }
                 }
