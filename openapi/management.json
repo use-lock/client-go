@@ -2359,6 +2359,14 @@
                         },
                         "minItems": 1
                     },
+                    "allowed_audiences": {
+                        "type": "array",
+                        "description": "The RFC 8707 resources the client may request tokens for, each exactly the `resource` value it sends and the `aud` its token then carries.",
+                        "items": {
+                            "type": "string"
+                        },
+                        "minItems": 1
+                    },
                     "revoked": {
                         "type": "boolean",
                         "description": "Whether the client is blocked from obtaining tokens."
@@ -2387,6 +2395,7 @@
                     "post_logout_redirect_uris",
                     "consent_required",
                     "scopes",
+                    "allowed_audiences",
                     "revoked"
                 ],
                 "title": "ClientData"
@@ -2456,6 +2465,14 @@
                     "revoked": {
                         "type": "boolean",
                         "description": "Whether the client is revoked. Defaults to false when omitted."
+                    },
+                    "allowed_audiences": {
+                        "type": "array",
+                        "description": "The RFC 8707 resources the client may request tokens for, each spelled exactly as the client sends it in `resource` and as it appears in the token's `aud`: the realm's issuer, or a registered resource's identifier resolved against it \u2014 a path-relative identifier such as `/docpipe` becomes the issuer with that path appended, an absolute one stays as it is.",
+                        "items": {
+                            "type": "string"
+                        },
+                        "maxItems": 100
                     }
                 },
                 "required": ["name", "token_endpoint_auth_method", "grant_types"],
@@ -4000,6 +4017,14 @@
                     "revoked": {
                         "type": "boolean",
                         "description": "Whether the client is revoked. Omit to keep the current state; false restores the client."
+                    },
+                    "allowed_audiences": {
+                        "type": "array",
+                        "description": "The RFC 8707 resources the client may request tokens for, spelled as the client sends them in `resource`. Replaces the current list.",
+                        "items": {
+                            "type": "string"
+                        },
+                        "maxItems": 100
                     }
                 },
                 "title": "UpdateClientData"
