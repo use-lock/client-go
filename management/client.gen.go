@@ -731,6 +731,9 @@ type ClientCollection struct {
 
 // ClientData defines model for ClientData.
 type ClientData struct {
+	// AllowedAudiences The RFC 8707 resources the client may request tokens for, each exactly the `resource` value it sends and the `aud` its token then carries.
+	AllowedAudiences []string `json:"allowed_audiences"`
+
 	// BackchannelLogoutURI Where a back-channel logout token is delivered.
 	BackchannelLogoutURI nullable.Nullable[string] `json:"backchannel_logout_uri,omitempty"`
 
@@ -798,6 +801,9 @@ type ClientSecretResponse struct {
 
 // CreateClientData defines model for CreateClientData.
 type CreateClientData struct {
+	// AllowedAudiences The RFC 8707 resources the client may request tokens for, each spelled exactly as the client sends it in `resource` and as it appears in the token's `aud`: the realm's issuer, or a registered resource's identifier resolved against it — a path-relative identifier such as `/docpipe` becomes the issuer with that path appended, an absolute one stays as it is.
+	AllowedAudiences *[]string `json:"allowed_audiences,omitempty"`
+
 	// BackchannelLogoutURI Where a back-channel logout token is delivered.
 	BackchannelLogoutURI nullable.Nullable[string] `json:"backchannel_logout_uri,omitempty"`
 
@@ -1057,6 +1063,9 @@ type TokenEndpointAuthMethod string
 
 // UpdateClientData defines model for UpdateClientData.
 type UpdateClientData struct {
+	// AllowedAudiences The RFC 8707 resources the client may request tokens for, spelled as the client sends them in `resource`. Replaces the current list.
+	AllowedAudiences *[]string `json:"allowed_audiences,omitempty"`
+
 	// BackchannelLogoutURI Where a back-channel logout token is delivered; `null` clears it.
 	BackchannelLogoutURI nullable.Nullable[string] `json:"backchannel_logout_uri,omitempty"`
 
@@ -1108,6 +1117,12 @@ type UpdateSocialProviderData struct {
 
 // ModelNotFoundException defines model for ModelNotFoundException.
 type ModelNotFoundException struct {
+	// Message Error overview.
+	Message string `json:"message"`
+}
+
+// ThrottleRequestsException defines model for ThrottleRequestsException.
+type ThrottleRequestsException struct {
 	// Message Error overview.
 	Message string `json:"message"`
 }
